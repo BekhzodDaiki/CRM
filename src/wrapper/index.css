@@ -1,0 +1,173 @@
+.trigger {
+  padding: 0 24px;
+  font-size: 18px;
+  line-height: 64px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.trigger:hover {
+  color: #1890ff;
+}
+
+.logo {
+  height: 32px;
+  margin: 16px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.site-layout .site-layout-background {
+  background: #fff;
+}
+
+.header-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.avatar {
+  background-color: #87d068;
+}
+
+.log-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 24px;
+}
+
+.ant-table-tbody > tr.ant-table-row:hover > td {
+  background: rgb(221, 221, 221) !important;
+}
+
+.addition-table {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.addition-table p {
+  flex: 0 0 25%;
+  font-weight: bold;
+}
+
+.addition-table span {
+  font-weight: 500;
+}
+
+.Pharmacy_Form_Map_Container {
+  margin-top: 25px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.Pharmacy_Map_Container {
+  width: 30vw;
+  height: 30vw;
+  margin-right: 15vw;
+}
+
+@media only screen and (max-width: 700px) {
+  .Pharmacy_Form_Map_Container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .Pharmacy_Map_Container {
+    width: 75vw;
+    height: 50vw;
+  }
+}
+
+.upload-container {
+  display: flex;
+  align-items: center;
+}
+
+.upload-container img {
+  margin-right: 8px;
+}
+
+.competitor {
+  height: 70vh;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+  padding: 8px;
+}
+
+.competitor-card {
+  display: flex;
+  /* justify-content: center; */
+  align-items: flex-start;
+  flex-direction: column;
+  margin-bottom: 24px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #f5f6f7;
+}
+
+.main-drug {
+  padding: 8px 16px;
+  background: #f5f6f7;
+  display: inline-block;
+  margin-bottom: 16px;
+}
+
+.competitor-choose-text {
+  margin-bottom: 8px;
+}
+
+.custom-input {
+  width: 48vw;
+  margin-bottom: 4px;
+  margin-right: 8px;
+}
+
+.competitor-list {
+  /* display: flex; */
+  /* flex-direction: column; */
+  /* justify-content: flex-start; */
+}
+
+.custom-tag {
+  display: block;
+  font-size: 13px;
+  padding: 2px;
+  border-radius: 2px;
+  margin-right: 8px;
+  margin-top: 4px;
+  background: #f5f6f7;
+  width: fit-content;
+}
+
+.close-icon {
+  font-size: 10px;
+  margin-left: 4px;
+  cursor: pointer;
+}
+
+.competitor-title-button-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.filter-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.filter-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 16px;
+}
+
+.filter-button span {
+  margin-right: 8px;
+}
