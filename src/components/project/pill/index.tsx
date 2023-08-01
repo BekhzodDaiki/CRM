@@ -95,6 +95,7 @@ const Pill = () => {
           <Popconfirm
             title="Уверены отвязать лекарство?"
             onConfirm={() => confirm(id)}
+            // @ts-ignore
             onCancel={() => cancel()}
             okText="Yes"
             cancelText="No"

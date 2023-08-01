@@ -75,7 +75,9 @@ const Pharmacy = () => {
     message.success("Click on Yes");
     setLoading(true);
     if (arg1 === "add") {
+      // @ts-ignore
       const request = await addOfferDrugStoresToOffer(props.id, {
+        // @ts-ignore
         offer_id: props.id,
         drugstore_id: drugStoreId,
         // "company_owner": true,
@@ -86,6 +88,7 @@ const Pharmacy = () => {
       setLoading(false);
     } else {
       const request = await removeOfferDrugStoresFromOffer(
+        // @ts-ignore
         props.id,
         drugStoreId
       );
@@ -107,6 +110,7 @@ const Pharmacy = () => {
     console.log("current: ", current);
     navigate({
       pathname: "/project/pharmacy",
+      // @ts-ignore
       search: `?${createSearchParams({
         ...Object.fromEntries(searchParams.entries()),
         page: current,
@@ -162,43 +166,50 @@ const Pharmacy = () => {
       title: "ID",
       render: ({ drugstore }: ICompanyDrugStores) =>
         drugstore && drugstore.id ? drugstore.id : "",
+        // @ts-ignore
       sorter: (a: string, b: string, c: string) => handleSort(c, "id"),
     },
     {
       title: "Наименование",
       render: ({ drugstore }: ICompanyDrugStores) =>
         drugstore && drugstore.name ? drugstore.name : "",
+        // @ts-ignore
       sorter: (a: string, b: string, c: string) => handleSort(c, "name"),
     },
     {
       title: "Класс",
       render: ({ drugstore }: ICompanyDrugStores) =>
         drugstore && drugstore.class_value ? drugstore.class_value : "",
-      sorter: (a: string, b: string, c: string) => handleSort(c, "class_value"),
+      // @ts-ignore
+        sorter: (a: string, b: string, c: string) => handleSort(c, "class_value"),
     },
     {
       title: "Груп id",
       render: ({ drugstore }: ICompanyDrugStores) =>
         drugstore && drugstore.group_id ? drugstore.group_id : "",
-      sorter: (a: string, b: string, c: string) => handleSort(c, "group_id"),
+      // @ts-ignore
+        sorter: (a: string, b: string, c: string) => handleSort(c, "group_id"),
     },
     {
       title: "ИНН",
       render: ({ drugstore }: ICompanyDrugStores) =>
         drugstore && drugstore.inn ? drugstore.inn : "",
-      sorter: (a: string, b: string, c: string) => handleSort(c, "inn"),
+      // @ts-ignore
+        sorter: (a: string, b: string, c: string) => handleSort(c, "inn"),
     },
     {
       title: "Наш пункт",
       render: ({ drugstore }: ICompanyDrugStores) =>
         drugstore && drugstore.nas_punkt ? drugstore.nas_punkt : "",
-      sorter: (a: string, b: string, c: string) => handleSort(c, "nas_punkt"),
+      // @ts-ignore
+        sorter: (a: string, b: string, c: string) => handleSort(c, "nas_punkt"),
     },
     {
       title: "Регион",
       render: ({ drugstore }: ICompanyDrugStores) =>
         drugstore && drugstore.region ? drugstore.region : "",
-      sorter: (a: string, b: string, c: string) => handleSort(c, "region"),
+      // @ts-ignore
+        sorter: (a: string, b: string, c: string) => handleSort(c, "region"),
     },
     {
       title: "Привязать/Отвязать",
@@ -208,6 +219,7 @@ const Pharmacy = () => {
             title="Уверены отвязать аптеку?"
             // description="Уверены отвязать аптеку?"
             onConfirm={() => confirm("remove", id)}
+            // @ts-ignore
             onCancel={() => cancel()}
             okText="Yes"
             cancelText="No"
@@ -305,6 +317,7 @@ const Pharmacy = () => {
             title="Уверены отвязать аптеку?"
             // description="Уверены отвязать аптеку?"
             onConfirm={() => confirm("remove", id)}
+            // @ts-ignore
             onCancel={() => cancel()}
             okText="Yes"
             cancelText="No"

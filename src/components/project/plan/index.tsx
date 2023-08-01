@@ -54,12 +54,6 @@ const Plan = () => {
     setLoading(false);
   };
 
-  const confirm = async (id: number) => {
-    setLoading(true);
-    await removeCompanyDrug(id);
-    getPlan();
-    setLoading(false);
-  };
   // console.log('ddd: ', planList.items);
   const columns: ColumnsType<IPlan> = [
     {

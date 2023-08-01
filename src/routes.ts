@@ -21,7 +21,7 @@ export default {
 
 
   // class: () => [baseUrl, 'drug-store-classifications/'].join('/'),
-  // rate: () => [baseUrl, 'drug-store-rates/'].join('/'),
+  rate: () => [baseUrl, 'drug-store-rates/'].join('/'),
   refresh: () => [baseUrl, 'auth/refresh/'].join('/'),
   // singleClass: (id: number) => [baseUrl, 'drug-store-classifications', `${id}/`].join('/'),
   // singleRate: (id: number) => [baseUrl, 'drug-store-rates', `${id}/`].join('/'),
@@ -36,7 +36,7 @@ export default {
 
   logout: () => [baseUrl, 'logout/'].join('/'),
 
-  // me: () => [baseUrl, 'users/me/'].join('/'),
+  me: () => [baseUrl, 'users/me/'].join('/'),
   // register: () => [baseUrl, 'user/register/'].join('/'),
   // atx: () => [baseUrl, 'atx/'].join('/'),
   // roles: () => [baseUrl, 'user/roles/'].join('/'),

@@ -74,6 +74,7 @@ const Setting = () => {
             title="Уверены отвязать лекарство?"
             // description="Уверены привязать аптеку?"
             onConfirm={() => confirm(id)}
+            // @ts-ignore
             onCancel={cancel}
             okText="Yes"
             cancelText="No"

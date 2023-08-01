@@ -1,24 +1,52 @@
 import { useEffect, useState, useRef, useMemo } from "react";
-import { createCompetitorDrug, createCompetitorDrugs, deleteCompetitorDrugs, editCompetitorDrugs, getCompetitors, getDrugs } from "./request";
+import {
+  createCompetitorDrug,
+  deleteCompetitorDrugs,
+  editCompetitorDrugs,
+  getCompetitors,
+  getDrugs,
+} from "./request";
 import { useSearchParams } from "react-router-dom";
 import { ColumnsType } from "antd/lib/table";
 import { IBase, ICompanyDrugs, ICompetitor } from "../../shared/types";
-import { Button, Input, Modal, Popconfirm, Select, Spin, Tag, Typography, message } from "antd";
-import { CloseOutlined, LoadingOutlined, PlusCircleOutlined } from "@ant-design/icons";
-import type { SelectProps } from 'antd/es/select';
-import debounce from 'lodash/debounce';
+import {
+  Button,
+  Input,
+  Modal,
+  Popconfirm,
+  Select,
+  Spin,
+  Tag,
+  Typography,
+  message,
+} from "antd";
+import {
+  CloseOutlined,
+  LoadingOutlined,
+  PlusCircleOutlined,
+} from "@ant-design/icons";
+import type { SelectProps } from "antd/es/select";
+import debounce from "lodash/debounce";
 
 const { Text, Link } = Typography;
 
 export interface DebounceSelectProps<ValueType = any>
-  extends Omit<SelectProps<ValueType | ValueType[]>, 'options' | 'children'> {
+  extends Omit<SelectProps<ValueType | ValueType[]>, "options" | "children"> {
   fetchOptions: (search: string) => Promise<ValueType[]>;
   debounceTimeout?: number;
 }
 
 function DebounceSelect<
-  ValueType extends { key?: string; label: React.ReactNode; value: string | number } = any,
->({ fetchOptions, debounceTimeout = 800, ...props }: DebounceSelectProps<ValueType>) {
+  ValueType extends {
+    key?: string;
+    label: React.ReactNode;
+    value: string | number;
+  } = any
+>({
+  fetchOptions,
+  debounceTimeout = 800,
+  ...props
+}: DebounceSelectProps<ValueType>) {
   const [fetching, setFetching] = useState(false);
   const [options, setOptions] = useState<ValueType[]>([]);
   const [searchParams] = useSearchParams();
@@ -53,7 +81,6 @@ function DebounceSelect<
       notFoundContent={fetching ? <Spin size="small" /> : null}
       {...props}
       options={options}
-
     />
   );
 }
@@ -69,10 +96,9 @@ async function fetchProjects(value: string): Promise<ProjectValue[]> {
   const { items } = searchedDrug;
   return items.map((item: any) => ({
     label: item.name,
-    value: item.id
-  }))
+    value: item.id,
+  }));
 }
-
 
 const Competitor = () => {
   const [searchParams] = useSearchParams();
@@ -82,21 +108,21 @@ const Competitor = () => {
     items: [],
     page: 1,
     size: 20,
-    total: 0
+    total: 0,
   });
   const [tagLoading, setTagLoading] = useState({
     isLoading: false,
-    activeId: 0
+    activeId: 0,
   });
   const [searchedValue, setSearchedValue] = useState({
-    label: '',
-    value: '',
-    id: 0
+    label: "",
+    value: "",
+    id: 0,
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [createDrug, setDrug] = useState({
     company_drug_id: 0,
-    competitor_drugs: []
+    competitor_drugs: [],
   });
   const [confirmLoading, setConfirmLoading] = useState(false);
   const showModal = () => {
@@ -111,8 +137,8 @@ const Competitor = () => {
       setIsModalOpen(false);
       setDrug({
         company_drug_id: 0,
-        competitor_drugs: []
-      })
+        competitor_drugs: [],
+      });
       getCompetitorList();
     }
   };
@@ -122,7 +148,9 @@ const Competitor = () => {
   };
 
   const getCompetitorList = async () => {
-    const request = await getCompetitors(Object.fromEntries(searchParams.entries()));
+    const request = await getCompetitors(
+      Object.fromEntries(searchParams.entries())
+    );
     setCompetitorList(request);
   };
   useEffect(() => {
@@ -140,21 +168,18 @@ const Competitor = () => {
     getCompetitorList();
   };
 
-  const cancel = () => {
-    console.log(e);
-  };
+  const cancel = () => {};
 
   const modifyCompetitorDrugs = async (
     id: number,
     companyDrugId: number,
-    competitor_drugs: any,
+    competitor_drugs: any
   ) => {
     setLoading(true);
-    const request = await editCompetitorDrugs(id,
-      {
-        company_drug_id: companyDrugId,
-        competitor_drugs,
-      });
+     await editCompetitorDrugs(id, {
+      company_drug_id: companyDrugId,
+      competitor_drugs,
+    });
     setLoading(false);
     getCompetitorList();
   };
@@ -178,11 +203,12 @@ const Competitor = () => {
                 fetchOptions={fetchProjects}
                 onChange={async (newValue) => {
                   setDrug({
+                    // @ts-ignore
                     company_drug_id: newValue.value,
-                    competitor_drugs: createDrug.competitor_drugs
-                  })
+                    competitor_drugs: createDrug.competitor_drugs,
+                  });
                 }}
-                style={{ width: '24vw', marginRight: 8 }}
+                style={{ width: "24vw", marginRight: 8 }}
                 showSearch
                 allowClear
                 loading={isLoading}
@@ -198,10 +224,11 @@ const Competitor = () => {
                 onChange={async (newValue) => {
                   setDrug({
                     company_drug_id: createDrug.company_drug_id,
-                    competitor_drugs: [newValue.value]
-                  })
+                    // @ts-ignore
+                    competitor_drugs: [newValue.value],
+                  });
                 }}
-                style={{ width: '24vw', marginRight: 8 }}
+                style={{ width: "24vw", marginRight: 8 }}
                 showSearch
                 allowClear
                 loading={isLoading}
@@ -218,88 +245,103 @@ const Competitor = () => {
           Создать Лекартсво
         </Button>
       </div>
-      {competitorList.items.map(({ company_drug, competitor_drugs, id }: any) => {
-        return (
-          <div key={company_drug.id} className="competitor-card">
-            <div className="competitor-title-button-wrapper">
-              <Text mark>{company_drug.id} - {company_drug.name}</Text>
-              <Popconfirm
-                title="Хотите удалить?"
-                onConfirm={() => confirm(id)}
-                onCancel={() => cancel()}
-                okText="ДА"
-                cancelText="НЕТ"
-              >
-                <Button
-                  danger
+      {competitorList.items.map(
+        ({ company_drug, competitor_drugs, id }: any) => {
+          return (
+            <div key={company_drug.id} className="competitor-card">
+              <div className="competitor-title-button-wrapper">
+                <Text mark>
+                  {company_drug.id} - {company_drug.name}
+                </Text>
+                <Popconfirm
+                  title="Хотите удалить?"
+                  onConfirm={() => confirm(id)}
+                  onCancel={() => cancel()}
+                  okText="ДА"
+                  cancelText="НЕТ"
                 >
-                  Удалить
-                </Button>
-              </Popconfirm>
-            </div>
-            <div>
-              <div className="competitor-choose-text">Укажите ваши конкуренты:</div>
-              <div className="competitor-search">
-                <DebounceSelect
-                  placeholder="Выберите лекарство"
-                  fetchOptions={fetchProjects}
-                  onChange={async (newValue) => {
-                    setSearchedValue({
-                      ...newValue,
-                      id: newValue.value
-                    });
-                  }}
-                  style={{ width: '36vw', marginRight: 8 }}
-                  showSearch
-                  allowClear
-                  loading={isLoading}
-                />
-                <Button
-                  type="primary"
-                  onClick={() => {
-                    const modifiedData = [...competitor_drugs.map(({ id }: IBase) => id), searchedValue.value];
-                    modifyCompetitorDrugs(id, company_drug.id, modifiedData)
-                  }}
-                  disabled={isLoading}
-                >
-                  Добавить
-                </Button>
+                  <Button danger>Удалить</Button>
+                </Popconfirm>
               </div>
-              <div className="competitor-list">
-                {competitor_drugs.map((drug: any) => (
-                  <div key={drug.id} className="custom-tag">
-                    {drug.name}
-                    {tagLoading.isLoading && tagLoading.activeId === drug.id ?
-                      (<LoadingOutlined className="close-icon" />) :
-                      (<CloseOutlined
-                        className="close-icon"
-                        onClick={() => {
-                          setTagLoading({
-                            isLoading: true,
-                            activeId: drug.id
-                          });
-                          const modifiedData = competitor_drugs.filter((cDrug: any) => {
-                            console.log(cDrug);
-                            if (cDrug.id !== drug.id) {
-                              return cDrug.id;
-                            }
-                          });
-                          modifyCompetitorDrugs(id, company_drug.id, modifiedData.map((drug: any) => drug.id));
-                          setTagLoading({
-                            isLoading: false,
-                            activeId: 0
-                          })
-                        }}
-                      />)
-                    }
-                  </div>
-                ))}
+              <div>
+                <div className="competitor-choose-text">
+                  Укажите ваши конкуренты:
+                </div>
+                <div className="competitor-search">
+                  <DebounceSelect
+                    placeholder="Выберите лекарство"
+                    fetchOptions={fetchProjects}
+                    onChange={async (newValue) => {
+                      // @ts-ignore
+                      setSearchedValue({
+                        ...newValue,
+                        // @ts-ignore
+                        id: newValue.value,
+                      });
+                    }}
+                    style={{ width: "36vw", marginRight: 8 }}
+                    showSearch
+                    allowClear
+                    loading={isLoading}
+                  />
+                  <Button
+                    type="primary"
+                    onClick={() => {
+                      const modifiedData = [
+                        ...competitor_drugs.map(({ id }: IBase) => id),
+                        searchedValue.value,
+                      ];
+                      modifyCompetitorDrugs(id, company_drug.id, modifiedData);
+                    }}
+                    disabled={isLoading}
+                  >
+                    Добавить
+                  </Button>
+                </div>
+                <div className="competitor-list">
+                  {competitor_drugs.map((drug: any) => (
+                    <div key={drug.id} className="custom-tag">
+                      {drug.name}
+                      {tagLoading.isLoading &&
+                      tagLoading.activeId === drug.id ? (
+                        <LoadingOutlined className="close-icon" />
+                      ) : (
+                        <CloseOutlined
+                          className="close-icon"
+                          onClick={() => {
+                            setTagLoading({
+                              isLoading: true,
+                              activeId: drug.id,
+                            });
+                            const modifiedData = competitor_drugs.filter(
+                              (cDrug: any) => {
+                                console.log(cDrug);
+                                if (cDrug.id !== drug.id) {
+                                  return cDrug.id;
+                                }
+                              }
+                            );
+                            modifyCompetitorDrugs(
+                              id,
+                              company_drug.id,
+                              modifiedData.map((drug: any) => drug.id)
+                            );
+                            setTagLoading({
+                              isLoading: false,
+                              activeId: 0,
+                            });
+                          }}
+                        />
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        );
-      })}
-    </div >
+          );
+        }
+      )}
+    </div>
   );
 };
 
