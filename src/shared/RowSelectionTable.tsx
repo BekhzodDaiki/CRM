@@ -12,7 +12,8 @@ const RowSelectionTable = ({
   pageSize=20,
   current=1,
   height="42vh",
-  rowSelection=true
+  rowSelection=true,
+  width = 'auto'
 }: any) => {
   const rowSelectionFunc = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: any) => {
@@ -29,7 +30,7 @@ const RowSelectionTable = ({
   return (
     <div>
       <Table
-        scroll={{ y: height }}
+        scroll={{ y: height, x: width }}
         columns={columns}
         dataSource={dataList.map(
           ((datum: any) => ({
@@ -56,6 +57,7 @@ const RowSelectionTable = ({
           hideOnSinglePage: true,
           showSizeChanger: false
         }}
+        
       />
     </div>
   );

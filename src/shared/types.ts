@@ -121,11 +121,6 @@ export interface Offer {
   vendor: string;
 }
 
-export interface IClassification {
-  id: number;
-  sales_per_day: number;
-  value: string;
-}
 
 export interface IDrugStore {
   id: number;
@@ -202,4 +197,63 @@ export interface IPlan {
   drug: IBase;
   id: number;
   price: number;
+}
+
+export interface ICompany extends IBase {
+  bitrix_id: string;
+}
+
+export interface ICompanyForm {
+  username: string;
+  password: string;
+  bitrix_id: string;
+  name: string;
+}
+
+export interface IPharmacy {
+  id: number;
+  username: string;
+  drug_store: IBase;
+}
+
+export interface IUser {
+  bitrix_id: string;
+  id: number;
+  name: string;
+  user: {
+    is_company: boolean;
+    is_drug_store: boolean;
+    is_drug_store_group_owner: boolean;
+    is_manager: boolean;
+    username: string;
+  };
+}
+
+export interface IGroupOwner {
+  id: number;
+  username: string;
+  drug_store_group: IBase;
+}
+
+export interface ISingleCompanyOffers extends IBase {
+  status: string;
+}
+
+export interface IAdminPharmacy {
+  address: string;
+  group: IBase;
+  id: number;
+  inn: string;
+  lat: number;
+  long: number;
+  name: string;
+  nas_punkt: string;
+  region: IBase;
+  type: null | string;
+}
+
+export interface IClassification {
+  id: number;
+  sales_per_day: number;
+  value: string;
 }

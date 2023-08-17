@@ -171,3 +171,22 @@
 .filter-button span {
   margin-right: 8px;
 }
+
+.back-submit-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.link-style {
+  color: #388e3c;
+}
+.link-style:hover {
+   color: #66bb6a;
+}
+
+.edit-form-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}

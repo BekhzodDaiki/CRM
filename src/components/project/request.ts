@@ -5,7 +5,7 @@ import { IClassification } from "../../shared/types";
 
 export const getOffers = async (params?: any) => {
   try {
-    const request = await httpClient.get(api.offer(), {params});
+    const request = await httpClient.get(api.offer(), { params });
 
     return request.data;
   } catch (error) {
@@ -15,7 +15,7 @@ export const getOffers = async (params?: any) => {
 
 export const getSingleOfferDrugStores = async (Id: number, params: any) => {
   try {
-    const request = await httpClient.get(api.singleOfferDrugStores(Id), {params});
+    const request = await httpClient.get(api.singleOfferDrugStores(Id), { params });
     return request.data;
   } catch (error) {
     return error;
@@ -42,7 +42,7 @@ export const removeOfferDrugStoresFromOffer = async (offerId: number, drugstoreI
 
 export const getSingleOfferDrugs = async (params: any) => {
   try {
-    const request = await httpClient.get(api.companyDrugs(), {params});
+    const request = await httpClient.get(api.companyDrugs(), { params });
     return request.data;
   } catch (error) {
     return error;
@@ -100,8 +100,9 @@ export const searchDrugstore = async (params: any) => {
 
 
 export const getPlanList = async (offerId: number, params: any) => {
+  console.log('offerId: ', offerId);
   try {
-    const request = await httpClient.get(api.singleOfferDrugs(offerId), {
+    const request = await httpClient.get(api.singleOfferDrugs(21), {
       params,
     });
     return request.data;
@@ -155,6 +156,15 @@ export const bindDrugsToUser = async (params: any) => {
     const request = await httpClient.patch(api.position(), params);
 
     return request.data;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const updatePriceNDesire = async (offerId: number, drugId: number, body: any) => {
+  try {
+    const request = await httpClient.patch(api.adminPriceNDesire(offerId, drugId), body);
+    return request.status;
   } catch (error) {
     return error;
   }

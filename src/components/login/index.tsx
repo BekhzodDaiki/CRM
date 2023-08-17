@@ -3,14 +3,17 @@ import {
   Input,
 } from 'antd';
 import { Button, notification } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CenterPos } from '../../assets/reusable/styles';
-import { login } from './request';
+import { login, me } from './request';
 import { useNavigate } from 'react-router-dom';
+import { getUser } from '../../reducer/user';
+import { useAppDispatch } from '../../hooks';
 
 const App = () => {
   const [isLoading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const onFinish = async (values: any) => {
     setLoading(true);
@@ -28,10 +31,28 @@ const App = () => {
       });
       return;
     }
+    // dispatch(getUser({name: 'test', id: '5', email: 'test'}));
+    
+    
     localStorage.setItem('access', result.access);
     localStorage.setItem('refresh', result.refresh);
-    navigate('/position?page=1&size=20');
+    // console.log('tempMe: ', tempMe);
+    
+    const tempMe = await me();
+    dispatch(getUser(tempMe));
+    localStorage.setItem('user', tempMe.user.is_manager ? 'admin' : 'company');
+    if (tempMe.user.is_manager) {
+      return navigate('/company/user?page=1&size=20');
+    } else {
+      navigate('/position?page=1&size=20');
+    }
   };
+
+  useEffect(() => {
+    localStorage.removeItem('access');
+    localStorage.removeItem('refresh');
+    localStorage.removeItem('user');
+  }, []);
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
