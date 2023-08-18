@@ -23,8 +23,9 @@ import SinglePharmacyUser from "./components/admin/pharmacy/users/single";
 import EditPharmacyUser from "./components/admin/pharmacy/users/edit";
 import SingleDirectorUser from "./components/admin/director/users/single";
 import EditSingleDirectorUser from "./components/admin/director/users/edit";
-
-import CompanySetting from './components/admin/company/setting';
+import CompanySetting from "./components/admin/company/setting";
+import ClassificationCreate from "./components/admin/company/setting/create";
+import SingleClassification from './components/admin/company/setting/edit';
 
 function ProtectedRoute({ redirectPath = "/login", children }: any) {
   if (!localStorage.getItem("access")) {
@@ -103,6 +104,26 @@ function App() {
                   <ProtectedRoute>
                     <Wrapper>
                       <CompanySetting />
+                    </Wrapper>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="create"
+                element={
+                  <ProtectedRoute>
+                    <Wrapper>
+                      <ClassificationCreate />
+                    </Wrapper>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path=":id"
+                element={
+                  <ProtectedRoute>
+                    <Wrapper>
+                      <SingleClassification />
                     </Wrapper>
                   </ProtectedRoute>
                 }

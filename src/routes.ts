@@ -43,6 +43,7 @@ export default {
     [baseUrl, "drug-store-group-owners", `${id}/`].join("/"),
   drugStoreGroups: () => [baseUrl, "drug-store-groups/"].join("/"),
   classification: () => [baseUrl, 'drug-store-classifications/'].join('/'),
+  singleClassification: (id: number) => [baseUrl, 'drug-store-classifications', `${id}/`].join('/'),
   rate: () => [baseUrl, "drug-store-rates/"].join("/"),
   refresh: () => [baseUrl, "auth/refresh/"].join("/"),
   adminPriceNDesire: (offerId: number, drugId: number) =>

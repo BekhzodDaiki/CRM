@@ -30,6 +30,7 @@ const CompanySetting = () => {
   };
 
   useEffect(() => {
+    setLoading(true);
     getCategories();
   }, []);
 
@@ -49,7 +50,7 @@ const CompanySetting = () => {
     {
       title: "Действие",
       render: ({ id }) => (
-        <Link className="link-style" to={`${id}/edit`}>
+        <Link className="link-style" to={`${id}`}>
           <EditOutlined style={{ fontSize: "24px" }} />
         </Link>
       ),
