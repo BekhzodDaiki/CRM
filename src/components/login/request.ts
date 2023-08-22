@@ -20,7 +20,7 @@ export const login = async (data: Login) => {
       const { response } = error;
       return response.data;
     }
-    return console.log('errrr: ', error);
+    return error;
   }
 }
 

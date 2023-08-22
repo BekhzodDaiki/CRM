@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getCategory } from "./request";
+import { getCoefficientList } from "./request";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "antd";
 import { Link } from "react-router-dom";
@@ -9,10 +9,10 @@ import { IBase, IClassification, ICompany } from "../../../../shared/types";
 import { EditOutlined } from "@ant-design/icons";
 import { TableProps } from "antd/es/table";
 
-const CompanySetting = () => {
+const Coefficient = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [category, setCategory] = useState({
+  const [coefficient, setCoefficient] = useState({
     items: [],
     page: 1,
     size: 20,
@@ -20,38 +20,87 @@ const CompanySetting = () => {
   });
   const [isLoading, setLoading] = useState(false);
 
-  const getCategories = async () => {
-    const request = await getCategory(
+  const getCoefficients = async () => {
+    const request = await getCoefficientList(
       Object.fromEntries(searchParams.entries())
     );
     if (request !== 'error') {
-      console.log('reqrrrrr: ', request);
-      setCategory(request);
+       setCoefficient(request);
     }
-    
+   
     setLoading(false);
   };
 
   useEffect(() => {
     setLoading(true);
-    getCategories();
+    getCoefficients();
   }, []);
 
   const columns: ColumnsType<IClassification> = [
     {
       title: "ID",
       dataIndex: "id",
+      fixed: "left",
+      width: 91
     },
     {
-      title: "Значение",
-      dataIndex: "value",
+      title: "Лекарство",
+      dataIndex: "drug",
+      render: ({ name }) => name,
+      // width: 200,
+      fixed: "left",
     },
     {
-      title: "Sales per day",
-      dataIndex: "sales_per_day",
+      title: 'Январь',
+      dataIndex: 'january'
+    },
+    {
+      title: 'Февраль',
+      dataIndex: 'february'
+    },
+    {
+      title: 'Март',
+      dataIndex: 'march'
+    },
+    {
+      title: 'Апрель',
+      dataIndex: 'april'
+    },
+    {
+      title: 'Май',
+      dataIndex: 'may'
+    },
+    {
+      title: 'Июнь',
+      dataIndex: 'june'
+    },
+    {
+      title: 'Июль',
+      dataIndex: 'july'
+    },
+    {
+      title: 'Август',
+      dataIndex: 'august'
+    },
+    {
+      title: 'Сентябрь',
+      dataIndex: 'september'
+    },
+    {
+      title: 'Октябрь',
+      dataIndex: 'october'
+    },
+    {
+      title: 'Ноябрь',
+      dataIndex: 'november'
+    },
+    {
+      title: 'Декабрь',
+      dataIndex: 'december'
     },
     {
       title: "Действие",
+      fixed: 'right',
       render: ({ id }) => (
         <Link className="link-style" to={`${id}`}>
           <EditOutlined style={{ fontSize: "24px" }} />
@@ -64,10 +113,9 @@ const CompanySetting = () => {
     navigate(`/company/setting?page=${current}&size=20`);
   };
 
-  console.log('items:: ', category);
   return (
     <div>
-      <h3 style={{ textAlign: "center" }}>Категория Аптек</h3>
+      <h3 style={{ textAlign: "center" }}>Коэффициент</h3>
       <div style={{ marginTop: 8, marginBottom: 16 }}>
         <Button type="primary">
           <Link to="create">Создать</Link>
@@ -75,17 +123,18 @@ const CompanySetting = () => {
       </div>
       <RowSelectionTable
         columns={columns}
-        dataList={category.items}
+        dataList={coefficient.items}
         dataType={null}
         onChange={onChangeSettingTable}
         isLoading={isLoading}
-        data={category}
+        data={coefficient}
         current={Number(searchParams.get("page"))}
         rowSelection={false}
         height={"50vh"}
+        width={2000}
       />
     </div>
   );
 };
 
-export default CompanySetting;
+export default Coefficient;

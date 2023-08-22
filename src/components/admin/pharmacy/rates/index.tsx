@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getCategory } from "./request";
+import { getRates } from "./request";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "antd";
 import { Link } from "react-router-dom";
@@ -21,14 +21,11 @@ const CompanySetting = () => {
   const [isLoading, setLoading] = useState(false);
 
   const getCategories = async () => {
-    const request = await getCategory(
-      Object.fromEntries(searchParams.entries())
-    );
-    if (request !== 'error') {
-      console.log('reqrrrrr: ', request);
+    const request = await getRates(Object.fromEntries(searchParams.entries()));
+    if (request !== "error") {
       setCategory(request);
     }
-    
+
     setLoading(false);
   };
 
@@ -43,12 +40,14 @@ const CompanySetting = () => {
       dataIndex: "id",
     },
     {
-      title: "Значение",
-      dataIndex: "value",
+      title: "Классификация",
+      dataIndex: "classification",
+      render: ({ value }) => value,
     },
     {
-      title: "Sales per day",
-      dataIndex: "sales_per_day",
+      title: "Аптека",
+      dataIndex: "drug_store",
+      render: ({ name }) => name,
     },
     {
       title: "Действие",
@@ -64,10 +63,9 @@ const CompanySetting = () => {
     navigate(`/company/setting?page=${current}&size=20`);
   };
 
-  console.log('items:: ', category);
   return (
     <div>
-      <h3 style={{ textAlign: "center" }}>Категория Аптек</h3>
+      <h3 style={{ textAlign: "center" }}>Оценка Аптек</h3>
       <div style={{ marginTop: 8, marginBottom: 16 }}>
         <Button type="primary">
           <Link to="create">Создать</Link>

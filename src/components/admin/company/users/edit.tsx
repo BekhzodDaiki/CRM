@@ -32,7 +32,7 @@ const Create = () => {
   // id: 9, username: '13212312', company_name: '123123', bitrix_id:
   const onFinish = async ({ bitrix_id, name, password, username }: any) => {
     setLoading(true);
-    console.log('passsss: ', password);
+    console.log("passsss: ", password);
     let modifiedData = {
       user: {},
     };
@@ -72,7 +72,7 @@ const Create = () => {
     if (isModified) {
       const request = await updateSingleCompany(id, modifiedData);
       if (request === 200) {
-        navigate('/company?page=1&page_size=20')
+        navigate("/company/user?page=1&page_size=20");
       }
     }
     setLoading(false);
@@ -80,9 +80,11 @@ const Create = () => {
 
   const fetchCompany = async () => {
     const request = await getSingleCompany(id);
-    setInitialValues(request);
-    form.setFieldsValue(request);
-    form.setFieldValue('name', request.company_name)
+    if (request !== "error") {
+      setInitialValues(request);
+      form.setFieldsValue(request);
+      form.setFieldValue("name", request.company_name);
+    }
   };
 
   useEffect(() => {
@@ -125,7 +127,7 @@ const Create = () => {
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
           <div className="back-submit-wrapper">
             <Button type="dashed" htmlType="submit">
-              <Link to="/company?page=1&page_size=20">Назад</Link>
+              <Link to="/company/user?page=1&page_size=20">Назад</Link>
             </Button>
             <Button loading={isLoading} type="primary" htmlType="submit">
               Создать

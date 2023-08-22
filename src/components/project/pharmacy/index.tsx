@@ -76,7 +76,7 @@ const Pharmacy = () => {
     setLoading(true);
     if (arg1 === "add") {
       // @ts-ignore
-      const request = await addOfferDrugStoresToOffer(props.id, {
+      await addOfferDrugStoresToOffer(props.id, {
         // @ts-ignore
         offer_id: props.id,
         drugstore_id: drugStoreId,
@@ -87,7 +87,7 @@ const Pharmacy = () => {
       message.success("Успешно привязано");
       setLoading(false);
     } else {
-      const request = await removeOfferDrugStoresFromOffer(
+      await removeOfferDrugStoresFromOffer(
         // @ts-ignore
         props.id,
         drugStoreId
@@ -106,8 +106,6 @@ const Pharmacy = () => {
   const onChangePharmacyTable: TableProps<IBase>["onChange"] = ({
     current,
   }) => {
-    // navigate(`/project?page=${current}&size=20`);
-    console.log("current: ", current);
     navigate({
       pathname: "/project/pharmacy",
       // @ts-ignore

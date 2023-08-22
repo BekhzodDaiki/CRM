@@ -32,7 +32,7 @@ const RowSelectionTable = ({
       <Table
         scroll={{ y: height, x: width }}
         columns={columns}
-        dataSource={dataList.map(
+        dataSource={dataList.length && dataList.map(
           ((datum: any) => ({
             ...datum,
             key: datum.id
@@ -53,7 +53,7 @@ const RowSelectionTable = ({
         pagination={{
           pageSize,
           current,
-          total: data.total,
+          total: data && data.total ? data.total : 1,
           hideOnSinglePage: true,
           showSizeChanger: false
         }}

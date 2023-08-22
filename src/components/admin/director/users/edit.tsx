@@ -79,11 +79,14 @@ function DebounceSelect<
 
 async function fetchDrugstores(value: string): Promise<ProjectValue[]> {
   const searchedDrugstores = await getDrugStoreGroups({ name: value });
-  const { items } = searchedDrugstores;
-  return items.map((item: any) => ({
-    label: item.name,
-    value: item.id,
-  }));
+  if (searchedDrugstores && searchedDrugstores.items) {
+    const { items } = searchedDrugstores;
+    return items.map((item: any) => ({
+      label: item.name,
+      value: item.id,
+    }));
+  }
+  return [];
 }
 
 const Create = () => {
@@ -110,7 +113,7 @@ const Create = () => {
     };
     let isModified = false;
     if (initialValues.username !== username) {
-      console.log('username');
+      console.log("username");
       isModified = true;
       modifiedData = {
         user: {
@@ -118,8 +121,11 @@ const Create = () => {
         },
       };
     }
-    if (isChange && initialValues.drug_store_group.id !== drug_store_group.value) {
-      console.log('drug_store_group');
+    if (
+      isChange &&
+      initialValues.drug_store_group.id !== drug_store_group.value
+    ) {
+      console.log("drug_store_group");
       isModified = true;
       modifiedData = {
         ...modifiedData,
@@ -127,7 +133,7 @@ const Create = () => {
       };
     }
     if (password) {
-      console.log('password');
+      console.log("password");
       isModified = true;
       modifiedData = {
         ...modifiedData,
@@ -140,7 +146,7 @@ const Create = () => {
     if (isModified) {
       const request = await updateSingleDirector(id, modifiedData);
       if (request === 200) {
-        navigate('/pharmacy-ceo?page=1&page_size=20')
+        navigate("/pharmacy-ceo?page=1&page_size=20");
       }
     }
     setLoading(false);
@@ -148,12 +154,16 @@ const Create = () => {
 
   const fetchSingleDirector = async () => {
     const request = await getSingleDirector(Number(id));
-    setInitialValues(request);
-    form.setFieldsValue(request);
-    form.setFieldValue("name", request.company_name);
+    if (request !== "error") {
+      setInitialValues(request);
+      form.setFieldsValue(request);
+      form.setFieldValue("name", request.company_name);
+    }
+    setLoading(false);
   };
 
   useEffect(() => {
+    setLoading(true);
     fetchSingleDirector();
   }, []);
 
@@ -209,7 +219,7 @@ const Create = () => {
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
           <div className="back-submit-wrapper">
             <Button type="dashed" htmlType="submit">
-              <Link to="/company?page=1&page_size=20">Назад</Link>
+              <Link to="/pharmacy-ceo/user?page=1&page_size=20">Назад</Link>
             </Button>
             <Button loading={isLoading} type="primary" htmlType="submit">
               Создать

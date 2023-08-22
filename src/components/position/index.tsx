@@ -9,7 +9,6 @@ const Position = () => {
   const navigate = useNavigate();
 
   const onChangeTab = (key: string) => {
-    console.log(key);
     navigate('/position?page=1&size=20');
   };
 

@@ -1,5 +1,4 @@
 const baseUrl = "http://64.225.75.16:5001/api/v1";
-// const baseUrl = import.meta.env.BASE_URL;
 
 export default {
   login: () => [baseUrl, "auth/"].join("/"),
@@ -45,10 +44,13 @@ export default {
   classification: () => [baseUrl, 'drug-store-classifications/'].join('/'),
   singleClassification: (id: number) => [baseUrl, 'drug-store-classifications', `${id}/`].join('/'),
   rate: () => [baseUrl, "drug-store-rates/"].join("/"),
+  singleRate: (id: number) => [baseUrl, "drug-store-rates", `${id}/`].join("/"),
   refresh: () => [baseUrl, "auth/refresh/"].join("/"),
   adminPriceNDesire: (offerId: number, drugId: number) =>
     [baseUrl, "offers", `${offerId}`, "offer-drugs", `${drugId}/`].join("/"),
   admin: () => [baseUrl, "drug-store-classifications/"].join("/"),
+  coefficients: () => [baseUrl, "drugs-coefficients/"].join("/"),
+  singleCoefficient: (id: number) => [baseUrl, "drugs-coefficients", `${id}/`].join("/"),
   // singleClass: (id: number) => [baseUrl, 'drug-store-classifications', `${id}/`].join('/'),
   // singleRate: (id: number) => [baseUrl, 'drug-store-rates', `${id}/`].join('/'),
 

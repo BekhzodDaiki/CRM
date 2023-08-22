@@ -1,12 +1,12 @@
-import { Button, Form, Input, Select, Spin, message } from "antd";
-import { Link } from "react-router-dom";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { createCompany, createPharmacyDirector, getDrugStoreGroups } from "./request";
-import type { SelectProps } from 'antd/es/select';
-import { useEffect, useState, useMemo, useRef, useCallback } from "react";
-import { ICompany, ICompanyForm } from "../../../../shared/types";
-import debounce from 'lodash/debounce';
-import FormItem from "antd/es/form/FormItem";
+import { Button, Form, Input, Select, SelectProps, Spin } from "antd";
+import { Link, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useMemo, useRef, useState } from "react";
+import { createCoefficient } from "./request";
+import { debounce } from "lodash";
+// import { getDrugStores } from "../users/request";
+import { getCategory } from "../../company/setting/request";
+import { getDrugs } from "../../../../shared/request";
 
 export interface DebounceSelectProps<ValueType = any>
   extends Omit<SelectProps<ValueType | ValueType[]>, 'options' | 'children'> {
@@ -21,18 +21,6 @@ function DebounceSelect<
   const [options, setOptions] = useState<ValueType[]>([]);
   const [searchParams] = useSearchParams();
   const fetchRef = useRef(0);
-
-  // const getListProject = useCallback(async () => {
-  //   const request = await getOffers(Object.fromEntries(searchParams.entries()));
-  //   setOptions(request.items.map((item: any) => ({
-  //     label: item.name,
-  //     value: item.id
-  //   })));
-  // }, [options]);
-
-  // useEffect(() => {
-  //   getListProject();
-  // }, []);
 
   const debounceFetcher = useMemo(() => {
     const loadOptions = (value: string) => {
@@ -54,7 +42,6 @@ function DebounceSelect<
 
     return debounce(loadOptions, debounceTimeout);
   }, [fetchOptions, debounceTimeout]);
-
   return (
     <Select
       labelInValue
@@ -69,21 +56,14 @@ function DebounceSelect<
 }
 
 
-type FieldType = {
-  username?: string;
-  password?: string;
-  name?: string;
-  bitrix_id?: string;
-};
-
 // Usage of DebounceSelect
 interface ProjectValue {
   label: string;
   value: string;
 }
 
-async function fetchGroupOwners(value: string): Promise<ProjectValue[]> {
-  const searchedDrugstores = await getDrugStoreGroups({ name: value });
+async function fetchDrugs(value: string): Promise<ProjectValue[]> {
+  const searchedDrugstores = await getDrugs({ name: value });
   const { items } = searchedDrugstores;
   return items.map((item: any) => ({
     label: item.name,
@@ -91,28 +71,84 @@ async function fetchGroupOwners(value: string): Promise<ProjectValue[]> {
   }))
 }
 
+const displayFormInputs = (label: string, key: string) => {
+  return (
+    <Form.Item
+      label={label}
+      name={key}
+      rules={[{ required: true, message: `Please input ${label}!` }]}
+    >
+      <Input />
+    </Form.Item>
+  );
+}
+
 const Create = () => {
   const [isLoading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
-
+  const [months] = useState([
+    {
+      label: 'Январь',
+      key: 'january',
+    },
+    {
+      label: 'Февраль',
+      key: 'february',
+    },
+    {
+      label: 'Март',
+      key: 'march',
+    },
+    {
+      label: 'Апрель',
+      key: 'april',
+    },
+    {
+      label: 'Май',
+      key: 'may',
+    },
+    {
+      label: 'Июнь',
+      key: 'june',
+    },
+    {
+      label: 'Июль',
+      key: 'july',
+    },
+    {
+      label: 'Август',
+      key: 'august',
+    },
+    {
+      label: 'Сентябрь',
+      key: 'september',
+    },
+    {
+      label: 'Октябрь',
+      key: 'october',
+    },
+    {
+      label: 'Ноябрь',
+      key: 'november',
+    },
+    {
+      label: 'Декабрь',
+      key: 'december',
+    },
+  ]);
 
   const onFinish = async ({
-    password,
-    username,
-    drug_store_group_id
+    drug,
+    ...rest
   }: any) => {
-
     setLoading(true);
-    const request = await createPharmacyDirector({
-      user: {
-        password,
-        username,
-      },
-      drug_store_group_id: drug_store_group_id.value
+    const request = await createCoefficient({
+      drug_id: drug.value,
+      ...rest,
     });
     setLoading(false);
     if (request === 201) {
-      navigate('/pharmacy-ceo/user?page=1&page_size=20');
+      navigate('/pharmacy-ceo/coefficient?page=1&page_size=20');
     }
   };
 
@@ -122,49 +158,38 @@ const Create = () => {
 
   return (
     <div>
-      <h3 style={{ textAlign: "center" }}>Создать Директора Аптек</h3>
+      <h3 style={{ textAlign: "center" }}>Создать Оценку</h3>
       <Form
         name="basic"
-        labelCol={{ span: 8 }}
-        wrapperCol={{ span: 16 }}
-        style={{ maxWidth: 600 }}
+        // labelCol={{ span: 8 }}
+        // wrapperCol={{ span: 16 }}
+        style={{ maxWidth: '64vw' }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
-        <FormItem
-          label="Drugstore Group"
-          name="drug_store_group_id"
-          rules={[{ required: true, message: "Please input your username!" }]}
+        <Form.Item
+          label="Лекарство"
+          name="drug"
+          rules={[{ required: true, message: "Please choose drug!" }]}
         >
           <DebounceSelect
-            placeholder="Выберите..."
-            fetchOptions={fetchGroupOwners}
-            style={{ width: '64%' }}
+            placeholder="Выберите лекарство"
+            fetchOptions={fetchDrugs}
+            // style={{ width: '100%' }}
             showSearch
             allowClear
             loading={isLoading}
           />
-        </FormItem>
-        <Form.Item<FieldType>
-          label="Username"
-          name="username"
-          rules={[{ required: true, message: "Please input your username!" }]}
-        >
-          <Input />
         </Form.Item>
-        <Form.Item<FieldType>
-          label="Пароль"
-          name="password"
-          rules={[{ required: true, message: "Please input your password!" }]}
-        >
-          <Input />
-        </Form.Item>
+        <div className="coefficient-months">
+          {months.map(({ label, key }: { label: string, key: string }) => (displayFormInputs(label, key)))}
+        </div>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
           <div className="back-submit-wrapper">
             <Button type="dashed" htmlType="submit">
-              <Link to="/pharmacy-ceo/user?page=1&page_size=20">Назад</Link>
+              <Link to="/pharmacy-ceo/coefficient?page=1&page_size=20">Назад</Link>
             </Button>
             <Button loading={isLoading} type="primary" htmlType="submit">
               Создать

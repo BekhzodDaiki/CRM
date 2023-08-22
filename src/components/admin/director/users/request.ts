@@ -1,13 +1,14 @@
 import { message } from "antd";
 import { httpClient } from "../../../../httpClient";
 import api from "../../../../routes";
+import { showError } from "../../../../shared/handlers";
 
 export const getGroupOwner = async (params: any) => {
   try {
     const request = await httpClient.get(api.groupOwner(), { params });
     return request.data;
   } catch (error) {
-    return error;
+    return showError();
   }
 };
 
@@ -18,7 +19,7 @@ export const createPharmacyDirector = async (body: any) => {
     return request.status;
   } catch (error) {
     message.error('Компания не создана')
-    return error;
+    return showError();
   }
 };
 
@@ -27,7 +28,7 @@ export const getDrugStoreGroups = async (params: any) => {
     const request = await httpClient.get(api.drugStoreGroups(), { params });
     return request.data;
   } catch (error) {
-    return error;
+    return showError();
   }
 };
 
@@ -36,7 +37,7 @@ export const getDirectorDrugstores = async (id: number, params: any) => {
     const request = await httpClient.get(api.singleDirectorDrugstores(id), { params });
     return request.data;
   } catch (error) {
-    return error;
+    return showError();
   }
 };
 
@@ -45,7 +46,7 @@ export const getSingleDirector = async (id: number) => {
     const request = await httpClient.get(api.singleDirector(id));
     return request.data;
   } catch (error) {
-    return error;
+    return showError();
   }
 };
 
@@ -56,6 +57,6 @@ export const updateSingleDirector = async (id: number, body: any) => {
     return request.status;
   } catch (error) {
     message.error('Директор не изменен')
-    return error;
+    return showError();
   }
 };

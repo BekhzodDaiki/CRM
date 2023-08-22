@@ -25,8 +25,10 @@ const Single = () => {
       Number(id),
       Object.fromEntries(searchParams.entries())
     );
-    console.log('req: ', request);
-    setDrugstores(request);
+    if (request !== "error") {
+      setDrugstores(request);
+    }
+
     setLoading(false);
   };
 
@@ -35,7 +37,9 @@ const Single = () => {
     fetchDirectorDrugstores();
   }, []);
 
-  const onChangeDrugstoreTable: TableProps<IBase>["onChange"] = ({ current }) => {
+  const onChangeDrugstoreTable: TableProps<IBase>["onChange"] = ({
+    current,
+  }) => {
     navigate(`/company?page=${current}&page_size=20`);
   };
 
@@ -75,7 +79,7 @@ const Single = () => {
         }}
       >
         <Button type="dashed">
-          <Link to="/pharmacy-ceo?page=1&page_size=20">Назад</Link>
+          <Link to="/pharmacy-ceo/user?page=1&page_size=20">Назад</Link>
         </Button>
       </div>
     </div>

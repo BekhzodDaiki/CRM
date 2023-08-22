@@ -19,7 +19,10 @@ const Company = () => {
     const request = await getCompanies(
       Object.fromEntries(searchParams.entries())
     );
-    setCompanyList(request);
+    
+    if (request !== 'error') {
+      setCompanyList(request);
+    }    
     setLoading(false);
   };
 
@@ -66,7 +69,7 @@ const Company = () => {
       </div>
       <RowSelectionTable
         columns={columns}
-        dataList={companyList}
+        dataList={companyList || []}
         dataType={null}
         onChange={onChangePillTable}
         isLoading={isLoading}

@@ -1,36 +1,18 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { Button, Form, Input, Select, Spin, message } from "antd";
+import { Button, Form, Input, Select, SelectProps, Spin, message } from "antd";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import {
-  getSinglePharmacy,
-  getDrugStores,
-  updateSinglePharmacy,
-} from "./request";
-import type { SelectProps } from "antd/es/select";
-import debounce from "lodash/debounce";
+import { getSingleRate, updateSingleRate } from "./request";
 import { ICompany, ICompanyForm } from "../../../../shared/types";
 import { useForm } from "antd/es/form/Form";
-import _ from "lodash";
-import { CloseOutlined } from "@ant-design/icons";
-
-type FieldType = {
-  username?: string;
-  password?: string;
-  name?: string;
-  bitrix_id?: string;
-};
+import _, { debounce } from "lodash";
+import { getDrugStores } from "../users/request";
+import { getCategory } from "../../company/setting/request";
 
 export interface DebounceSelectProps<ValueType = any>
   extends Omit<SelectProps<ValueType | ValueType[]>, "options" | "children"> {
   fetchOptions: (search: string) => Promise<ValueType[]>;
   debounceTimeout?: number;
-}
-
-// Usage of DebounceSelect
-interface ProjectValue {
-  label: string;
-  value: string;
 }
 
 function DebounceSelect<
@@ -46,7 +28,6 @@ function DebounceSelect<
 }: DebounceSelectProps<ValueType>) {
   const [fetching, setFetching] = useState(false);
   const [options, setOptions] = useState<ValueType[]>([]);
-  const [searchParams] = useSearchParams();
   const fetchRef = useRef(0);
 
   const debounceFetcher = useMemo(() => {
@@ -82,6 +63,12 @@ function DebounceSelect<
   );
 }
 
+// Usage of DebounceSelect
+interface ProjectValue {
+  label: string;
+  value: string;
+}
+
 async function fetchDrugstores(value: string): Promise<ProjectValue[]> {
   const searchedDrugstores = await getDrugStores({ name: value });
   if (searchedDrugstores && searchedDrugstores.items) {
@@ -94,73 +81,72 @@ async function fetchDrugstores(value: string): Promise<ProjectValue[]> {
   return [];
 }
 
-const Create = () => {
+async function fetchClassification(value: string): Promise<ProjectValue[]> {
+  const searchedDrugstores = await getCategory({ value });
+  if (searchedDrugstores && searchedDrugstores.items) {
+    const { items } = searchedDrugstores;
+    return items.map((item: any) => ({
+      label: item.value,
+      value: item.id,
+    }));
+  }
+  return [];
+}
+
+const Edit = () => {
   const [isLoading, setLoading] = useState<boolean>(false);
   const [form] = useForm();
   const navigate = useNavigate();
   const { id } = useParams();
-  const [isChange, setChange] = useState(false);
-  const [initialValues, setInitialValues] = useState({
-    drug_store: { name: "" },
-    id: -1,
-    username: "",
-  });
-
+  const [initialValues, setInitialValues] = useState({});
   // id: 9, username: '13212312', company_name: '123123', bitrix_id:
-  const onFinish = async ({ drug_store, password, username }: any) => {
+  const onFinish = async ({ drug_store, classification }: any) => {
     setLoading(true);
-    // console.log("values: ", values);
-    let modifiedData = {
-      user: {},
-    };
-    let isModified = false;
-    if (drug_store && initialValues.drug_store.name !== drug_store.value) {
-      isModified = true;
-      modifiedData = {
+    let changedData = {};
+    if (drug_store.value !== initialValues.drug_store.value) {
+      changedData = {
         drug_store_id: drug_store.value,
       };
     }
-    if (initialValues.username !== username) {
-      isModified = true;
-      modifiedData = {
-        ...modifiedData,
-        user: {
-          username,
-        },
+    if (classification.value !== initialValues.classification.value) {
+      changedData = {
+        ...changedData,
+        classification_id: classification.value,
       };
     }
 
-    if (password) {
-      isModified = true;
-      modifiedData = {
-        ...modifiedData,
-        user: {
-          ...modifiedData.user,
-          password,
-        },
-      };
-    }
-    if (isModified) {
-      const request = await updateSinglePharmacy(Number(id), modifiedData);
+    if (Object.keys(changedData).length) {
+      const request = await updateSingleRate(id, changedData);
+      console.log("requestttt: ", request);
       if (request === 200) {
-        navigate("/admin-pharmacy/user?page=1&page_size=20");
+        navigate("/admin-pharmacy/rate?page=1&page_size=20");
       }
     }
     setLoading(false);
   };
 
-  const fetchPharmacy = async () => {
-    const request = await getSinglePharmacy(Number(id));
+  const fetchRate = async () => {
+    const request = await getSingleRate(Number(id));
     if (request !== "error") {
-      setInitialValues(request);
-      form.setFieldValue("username", request.username);
+      let data = {
+        classification: {
+          value: request.classification.id,
+          label: request.classification.value,
+        },
+        drug_store: {
+          value: request.drug_store.id,
+          label: request.drug_store.name,
+        },
+      };
+      setInitialValues(data);
+      form.setFieldsValue(data);
     }
     setLoading(false);
   };
 
   useEffect(() => {
     setLoading(true);
-    fetchPharmacy();
+    fetchRate();
   }, []);
 
   const onFinishFailed = (errorInfo: any) => {
@@ -169,51 +155,54 @@ const Create = () => {
 
   return (
     <div className="edit-form-wrapper">
-      <h3 style={{ textAlign: "center", marginBottom: 24 }}>Изменить Аптеку</h3>
+      <h3 style={{ textAlign: "center", marginBottom: 24 }}>Изменить Оценку</h3>
       <Form
         name="basic"
-        labelCol={{ span: 8 }}
-        wrapperCol={{ span: 16 }}
-        style={{ maxWidth: 600 }}
+        // labelCol={{ span: 8 }}
+        // wrapperCol={{ span: 16 }}
+        // style={{ maxWidth: 600 }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
         form={form}
         disabled={isLoading}
       >
-        <Form.Item label="Drugstore" name="drug_store">
-          {isChange ? (
-            <DebounceSelect
-              placeholder="Выберите аптеку"
-              fetchOptions={fetchDrugstores}
-              style={{ width: "64%" }}
-              showSearch
-              allowClear
-              loading={isLoading}
-            />
-          ) : (
-            <div>
-              {initialValues.drug_store.name}
-              <Button type="dashed" onClick={() => setChange(true)}>
-                Изменить
-              </Button>
-            </div>
-          )}
+        <Form.Item
+          label="Аптека"
+          name="drug_store"
+          rules={[{ required: true, message: "Please choose drugstore!" }]}
+        >
+          <DebounceSelect
+            placeholder="Выберите аптеку"
+            fetchOptions={fetchDrugstores}
+            style={{ width: "24vw" }}
+            showSearch
+            allowClear
+            loading={isLoading}
+          />
         </Form.Item>
-        <Form.Item<FieldType> label="Username" name="username">
-          <Input />
-        </Form.Item>
-        <Form.Item<FieldType> label="Пароль" name="password">
-          <Input />
+        <Form.Item
+          label="Классификация"
+          name="classification"
+          rules={[{ required: true, message: "Please choose classification!" }]}
+        >
+          <DebounceSelect
+            placeholder="Выберите класификацию"
+            fetchOptions={fetchClassification}
+            // style={{ width: '100%' }}
+            showSearch
+            allowClear
+            loading={isLoading}
+          />
         </Form.Item>
 
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+        <Form.Item>
           <div className="back-submit-wrapper">
             <Button type="dashed" htmlType="submit">
-              <Link to="/admin-pharmacy/user?page=1&page_size=20">Назад</Link>
+              <Link to="/admin-pharmacy/rate?page=1&page_size=20">Назад</Link>
             </Button>
             <Button loading={isLoading} type="primary" htmlType="submit">
-              Создать
+              Изменить
             </Button>
           </div>
         </Form.Item>
@@ -222,4 +211,4 @@ const Create = () => {
   );
 };
 
-export default Create;
+export default Edit;

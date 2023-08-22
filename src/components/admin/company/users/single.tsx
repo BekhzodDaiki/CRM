@@ -25,7 +25,10 @@ const Single = () => {
       id,
       Object.fromEntries(searchParams.entries())
     );
-    setCompany(request);
+    if (request !== "error") {
+      setCompany(request);
+    }
+
     setLoading(false);
   };
 
@@ -35,7 +38,7 @@ const Single = () => {
   }, []);
 
   const onChangePillTable: TableProps<IBase>["onChange"] = ({ current }) => {
-    navigate(`/company?page=${current}&page_size=20`);
+    navigate(`/company/user?page=${current}&page_size=20`);
   };
 
   const columns: ColumnsType<ISingleCompanyOffers> = [
@@ -74,7 +77,7 @@ const Single = () => {
         }}
       >
         <Button type="dashed">
-          <Link to="/company?page=1&page_size=20">Назад</Link>
+          <Link to="/company/user?page=1&page_size=20">Назад</Link>
         </Button>
       </div>
     </div>

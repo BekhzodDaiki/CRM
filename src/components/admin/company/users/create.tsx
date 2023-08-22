@@ -86,7 +86,7 @@ const Create = () => {
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
           <div className="back-submit-wrapper">
             <Button type="dashed" htmlType="submit">
-              <Link to="/company?page=1&page_size=20">Назад</Link>
+              <Link to="/company/user?page=1&page_size=20">Назад</Link>
             </Button>
             <Button loading={isLoading} type="primary" htmlType="submit">
               Создать

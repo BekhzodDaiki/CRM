@@ -3,7 +3,11 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { getDrugStores } from "./request";
 import { ColumnsType } from "antd/lib/table";
 import { TableProps } from "antd/es/table";
-import { IAdminPharmacy, IBase, ISingleCompanyOffers } from "../../../../shared/types";
+import {
+  IAdminPharmacy,
+  IBase,
+  ISingleCompanyOffers,
+} from "../../../../shared/types";
 import RowSelectionTable from "../../../../shared/RowSelectionTable";
 import { Button } from "antd";
 import { Link } from "react-router-dom";
@@ -25,7 +29,10 @@ const Single = () => {
       id,
       ...Object.fromEntries(searchParams.entries()),
     });
-    setDrugstores(request);
+    if (request !== "error") {
+      setDrugstores(request);
+    }
+
     setLoading(false);
   };
 
@@ -35,7 +42,7 @@ const Single = () => {
   }, []);
 
   const onChangeDrugstore: TableProps<IBase>["onChange"] = ({ current }) => {
-    navigate(`/admin-pharmacy?page=${current}&page_size=20`);
+    navigate(`/admin-pharmacy/user?page=${current}&page_size=20`);
   };
 
   const columns: ColumnsType<IAdminPharmacy> = [
@@ -71,12 +78,14 @@ const Single = () => {
     },
     {
       title: "Геолокация",
-      render: ({ lat, long }) => <a
-        href={`https://www.google.com/maps/search/?api=1&query=${lat},${long}`}
-        target="_blank"
-      >
-        Google Map
-      </a>,
+      render: ({ lat, long }) => (
+        <a
+          href={`https://www.google.com/maps/search/?api=1&query=${lat},${long}`}
+          target="_blank"
+        >
+          Google Map
+        </a>
+      ),
       // render: ({ lat, long }) => <span>{`${lat}-${long}`}</span>,
     },
     {
@@ -87,7 +96,7 @@ const Single = () => {
 
   return (
     <div>
-      <h3 style={{ textAlign: 'center' }} >Аптеки</h3>
+      <h3 style={{ textAlign: "center" }}>Аптеки</h3>
       <RowSelectionTable
         columns={columns}
         dataList={drugstore.items}
@@ -107,7 +116,7 @@ const Single = () => {
         }}
       >
         <Button type="dashed">
-          <Link to="/admin-pharmacy?page=1&page_size=20">Назад</Link>
+          <Link to="/admin-pharmacy/user?page=1&page_size=20">Назад</Link>
         </Button>
       </div>
     </div>

@@ -1,13 +1,14 @@
 import { message } from "antd";
 import { httpClient } from "../../../../httpClient";
 import api from "../../../../routes";
+import { showError } from "../../../../shared/handlers";
 
 export const getPharmacies = async (params: any) => {
   try {
     const request = await httpClient.get(api.pharmacy(), { params });
     return request.data;
   } catch (error) {
-    return error;
+    return showError();
   }
 };
 
@@ -18,7 +19,7 @@ export const createCompany = async (body: any) => {
     return request.status;
   } catch (error) {
     message.error('Компания не создана')
-    return error;
+    return showError();
   }
 };
 
@@ -27,7 +28,7 @@ export const getDrugStores = async (params: any) => {
     const request = await httpClient.get(api.drugStores(), { params });
     return request.data;
   } catch (error) {
-    return error;
+    return showError();
   }
 };
 
@@ -36,7 +37,7 @@ export const createPharmacy = async (body: any) => {
     const request = await httpClient.post(api.pharmacy(), body);
     return request.status;
   } catch (error) {
-    return error;
+    return showError();
   }
 }
 
@@ -45,7 +46,7 @@ export const getSinglePharmacy = async (id: number) => {
     const request = await httpClient.get(api.singlePharmacy(id));
     return request.data;;
   } catch (error) {
-    return error;
+    return showError();
   }
 };
 
@@ -56,6 +57,6 @@ export const updateSinglePharmacy = async (id: number, body: any) => {
     console.log('reqess: ', request.status);
     return request.status;
   } catch (error) {
-    return error;
+    return showError();
   }
 };

@@ -1,5 +1,6 @@
 import { httpClient } from "../httpClient";
 import api from '../routes';
+import { showError } from "./handlers";
 
 export const getDrugs = async (params: any) => {
   try {
@@ -9,7 +10,7 @@ export const getDrugs = async (params: any) => {
 
     return request.data;
   } catch (error) {
-    return error;
+    return showError();
   }
 };
 
@@ -21,6 +22,6 @@ export const getOffers = async (params: any) => {
 
     return request.data;
   } catch (error) {
-    return error;
+    return showError();
   }
 };

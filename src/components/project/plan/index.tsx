@@ -53,19 +53,21 @@ const Plan = () => {
       selectedProjectId.value,
       Object.fromEntries(searchParams.entries())
     );
-    let temp = request1.items.reduce(
-      (acc: any, { receipts_avg, ...rest }: any) => {
-        return [
-          ...acc,
-          {
-            ...rest,
-            ...receipts_avg,
-          },
-        ];
-      },
-      []
-    );
-    setPlanList({ ...request1, items: temp });
+    if (request1 !== "error") {
+      let temp = request1.items.reduce(
+        (acc: any, { receipts_avg, ...rest }: any) => {
+          return [
+            ...acc,
+            {
+              ...rest,
+              ...receipts_avg,
+            },
+          ];
+        },
+        []
+      );
+      setPlanList({ ...request1, items: temp });
+    }
 
     setLoading(false);
   };
@@ -623,6 +625,7 @@ const Plan = () => {
             ...displayColumns(),
             {
               title: "Действие",
+              fixed: "right",
               render: ({
                 id,
                 drug,

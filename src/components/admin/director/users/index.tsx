@@ -19,7 +19,10 @@ const DirectorPharmacy = () => {
     const request = await getGroupOwner(
       Object.fromEntries(searchParams.entries())
     );
-    setDirector(request);
+    if (request !== 'error') {
+      setDirector(request);
+    }
+    
     setLoading(false);
   };
 

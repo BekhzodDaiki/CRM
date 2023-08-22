@@ -11,7 +11,7 @@ import {
   LineChartOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, Avatar, Button } from "antd";
-import { createElement, useEffect, useState } from "react";
+import { createElement, useEffect, useLayoutEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./index.css";
 import { logout } from "./request";
@@ -25,7 +25,29 @@ interface Me {
 
 const { Header, Sider, Content } = Layout;
 
+function getWindowDimensions() {
+  const { innerWidth: width, innerHeight: height } = window;
+  return {
+    width,
+    height,
+  };
+}
+
+
 const Wrapper = ({ children }: any) => {
+  const [windowDimensions, setWindowDimensions] = useState(
+    getWindowDimensions()
+  );
+
+  function handleResize() {
+    setWindowDimensions(getWindowDimensions());
+  }
+
+  useLayoutEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
@@ -64,13 +86,15 @@ const Wrapper = ({ children }: any) => {
     } else if (window.location.pathname.includes("/company/setting")) {
       return setAciveMenu(["comSetting"]);
     } else if (window.location.pathname.includes("/admin-pharmacy/user")) {
-      return setAciveMenu(["pharUsers"]);
-    } else if (window.location.pathname.includes("/admin-pharmacy/setting")) {
+      return setAciveMenu(["rate"]);
+    } else if (window.location.pathname.includes("/admin-pharmacy/rate")) {
       return setAciveMenu(["pharSetting"]);
     } else if (window.location.pathname.includes("/pharmacy-ceo/user")) {
       return setAciveMenu(["pharmacyCeoUsers"]);
+    } else if (window.location.pathname.includes("/pharmacy-ceo/coefficient")) {
+      return setAciveMenu(["coefficient"]);
     } else if (
-      window.location.pathname.includes("/pharmacy-ceo/coeficient-drug")
+      window.location.pathname.includes("/pharmacy-ceo/coefficient")
     ) {
       return setAciveMenu(["pharmacyCeoSetting"]);
     }
@@ -109,7 +133,7 @@ const Wrapper = ({ children }: any) => {
               icon={<SnippetsOutlined />}
               onClick={() => navigate("/company/setting?page=1&page_size=20")}
             >
-               Категория аптек
+              Категория аптек
             </Menu.Item>
           </Menu.SubMenu>
           <Menu.SubMenu
@@ -119,22 +143,22 @@ const Wrapper = ({ children }: any) => {
             title="Аптеки"
           >
             <Menu.Item
-              key="pharUsers"
+              key="rate"
               icon={<SnippetsOutlined />}
               onClick={() =>
                 navigate("/admin-pharmacy/user?page=1&page_size=20")
               }
             >
-              Настройка
+              Аптеки
             </Menu.Item>
             <Menu.Item
               key="pharSetting"
               icon={<SnippetsOutlined />}
               onClick={() =>
-                navigate("/admin-pharmacy/setting?page=1&page_size=20")
+                navigate("/admin-pharmacy/rate?page=1&page_size=20")
               }
             >
-              Категория аптек
+              Оценка
             </Menu.Item>
           </Menu.SubMenu>
           <Menu.SubMenu
@@ -151,10 +175,10 @@ const Wrapper = ({ children }: any) => {
               Пользователи
             </Menu.Item>
             <Menu.Item
-              key="pharmacyCeoSetting"
+              key="coefficient"
               icon={<SnippetsOutlined />}
               onClick={() =>
-                navigate("/pharmacy-ceo/coeficient-drug?page=1&page_size=20")
+                navigate("/pharmacy-ceo/coefficient?page=1&page_size=20")
               }
             >
               Коефициент лекарств
@@ -220,8 +244,9 @@ const Wrapper = ({ children }: any) => {
         style={{
           height: "100vh",
           overflowY: "scroll",
-          minWidth: "fit-content",
-          width: "fit-content",
+          // minWidth: "fit-content !important",
+          // width: "fit-content !important",
+          // flex: 'initial !important'
         }}
       >
         <div className="logo" />
@@ -277,7 +302,10 @@ const Wrapper = ({ children }: any) => {
             padding: 24,
           }}
         >
-          <div>{children}</div>
+          <div style={{
+            maxHeight: windowDimensions.height - 180,
+            overflowY: 'auto'
+          }}>{children}</div>
         </Content>
       </Layout>
     </Layout>

@@ -1,6 +1,6 @@
 import { httpClient } from "../../httpClient";
 import api from '../../routes';
-import { errorHandlers } from "../../shared/handlers";
+import { errorHandlers, showError } from "../../shared/handlers";
 import { IClassification } from "../../shared/types";
 
 export const getOffers = async (params?: any) => {
@@ -9,7 +9,7 @@ export const getOffers = async (params?: any) => {
 
     return request.data;
   } catch (error) {
-    return error;
+    return showError();
   }
 };
 
@@ -18,7 +18,7 @@ export const getSingleOfferDrugStores = async (Id: number, params: any) => {
     const request = await httpClient.get(api.singleOfferDrugStores(Id), { params });
     return request.data;
   } catch (error) {
-    return error;
+    return showError();
   }
 };
 
@@ -27,7 +27,7 @@ export const addOfferDrugStoresToOffer = async (Id: number, body: any) => {
     const request = await httpClient.post(api.singleOfferDrugStores(Id), body);
     return request.data;
   } catch (error) {
-    return error;
+    return showError();
   }
 };
 
@@ -36,7 +36,7 @@ export const removeOfferDrugStoresFromOffer = async (offerId: number, drugstoreI
     const request = await httpClient.delete(api.singleOfferDrugStore(offerId, drugstoreId));
     return request.data;
   } catch (error) {
-    return error;
+    return showError();
   }
 };
 
@@ -45,7 +45,7 @@ export const getSingleOfferDrugs = async (params: any) => {
     const request = await httpClient.get(api.companyDrugs(), { params });
     return request.data;
   } catch (error) {
-    return error;
+    return showError();
   }
 };
 
@@ -56,7 +56,7 @@ export const getSearchedDrugs = async (params: any) => {
     });
     return request.data;
   } catch (error) {
-    return error;
+    return showError();
   }
 }
 
@@ -65,7 +65,7 @@ export const addOfferDrug = async (Id: number, body: any) => {
     const request = await httpClient.post(api.singleOfferDrugs(Id), body);
     return request.data;
   } catch (error) {
-    return error;
+    return showError();
   }
 };
 
@@ -74,7 +74,7 @@ export const removeOfferDrug = async (id: number, drugId: any) => {
     const request = await httpClient.delete(api.singleOfferDrug(id, drugId));
     return request.data;
   } catch (error) {
-    return error;
+    return showError();
   }
 };
 
@@ -83,7 +83,7 @@ export const removeCompanyDrug = async (drugId: number) => {
     const request = await httpClient.delete(api.singlePositionDrug(drugId));
     return request.data;
   } catch (error) {
-    return error;
+    return showError();
   }
 };
 
@@ -94,7 +94,7 @@ export const searchDrugstore = async (params: any) => {
     });
     return request.data;
   } catch (error) {
-    return error;
+    return showError();
   }
 };
 
@@ -107,7 +107,7 @@ export const getPlanList = async (offerId: number, params: any) => {
     });
     return request.data;
   } catch (error) {
-    return error;
+    return showError();
   }
 };
 
@@ -118,7 +118,7 @@ export const getDrugRecepits = async (offerId: number, params: any) => {
     });
     return request.data;
   } catch (error) {
-    return error;
+    return showError();
   }
 };
 
@@ -130,7 +130,7 @@ export const updateSingleOffer = async (offerId: number, offerDrugId: number, pa
     });
     return request.data;
   } catch (error) {
-    return error;
+    return showError();
   }
 };
 
@@ -146,7 +146,7 @@ export const updateSingleOffer = async (offerId: number, offerDrugId: number, pa
 
 //     return request.data;
 //   } catch (error) {
-//     return error;
+//     return showError();
 //   }
 // };
 
@@ -157,7 +157,7 @@ export const bindDrugsToUser = async (params: any) => {
 
     return request.data;
   } catch (error) {
-    return error;
+    return showError();
   }
 };
 
@@ -166,7 +166,7 @@ export const updatePriceNDesire = async (offerId: number, drugId: number, body: 
     const request = await httpClient.patch(api.adminPriceNDesire(offerId, drugId), body);
     return request.status;
   } catch (error) {
-    return error;
+    return showError();
   }
 };
 

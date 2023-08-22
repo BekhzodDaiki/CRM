@@ -60,10 +60,11 @@ const Create = () => {
 
   const fetchClassification = async () => {
     const request = await getSingleClassification(Number(id));
-    console.log("req: ", request);
+    if (request !== "error") {
+      setInitialValues(request);
+      form.setFieldsValue(request);
+    }
     setLoading(false);
-    setInitialValues(request);
-    form.setFieldsValue(request);
   };
 
   useEffect(() => {

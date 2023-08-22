@@ -1,12 +1,11 @@
-import { Button, Form, Input, Select, Spin, message } from "antd";
-import { Link } from "react-router-dom";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { createCompany, createPharmacy, getDrugStores } from "./request";
-import type { SelectProps } from "antd/es/select";
-import { useEffect, useState, useMemo, useRef, useCallback } from "react";
-import { ICompany, ICompanyForm } from "../../../../shared/types";
-import debounce from "lodash/debounce";
-import FormItem from "antd/es/form/FormItem";
+import { Button, Form, Input, Select, SelectProps, Spin } from "antd";
+import { Link, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useMemo, useRef, useState } from "react";
+import { createRate } from "./request";
+import { debounce } from "lodash";
+import { getDrugStores } from "../users/request";
+import { getCategory } from "../../company/setting/request";
 
 export interface DebounceSelectProps<ValueType = any>
   extends Omit<SelectProps<ValueType | ValueType[]>, "options" | "children"> {
@@ -30,18 +29,6 @@ function DebounceSelect<
   const [searchParams] = useSearchParams();
   const fetchRef = useRef(0);
 
-  // const getListProject = useCallback(async () => {
-  //   const request = await getOffers(Object.fromEntries(searchParams.entries()));
-  //   setOptions(request.items.map((item: any) => ({
-  //     label: item.name,
-  //     value: item.id
-  //   })));
-  // }, [options]);
-
-  // useEffect(() => {
-  //   getListProject();
-  // }, []);
-
   const debounceFetcher = useMemo(() => {
     const loadOptions = (value: string) => {
       fetchRef.current += 1;
@@ -62,7 +49,6 @@ function DebounceSelect<
 
     return debounce(loadOptions, debounceTimeout);
   }, [fetchOptions, debounceTimeout]);
-
   return (
     <Select
       labelInValue
@@ -74,13 +60,6 @@ function DebounceSelect<
     />
   );
 }
-
-type FieldType = {
-  username?: string;
-  password?: string;
-  name?: string;
-  bitrix_id?: string;
-};
 
 // Usage of DebounceSelect
 interface ProjectValue {
@@ -100,22 +79,31 @@ async function fetchDrugstores(value: string): Promise<ProjectValue[]> {
   return [];
 }
 
+async function fetchClassification(value: string): Promise<ProjectValue[]> {
+  const searchedDrugstores = await getCategory({ value });
+  if (searchedDrugstores && searchedDrugstores.items) {
+    const { items } = searchedDrugstores;
+    return items.map((item: any) => ({
+      label: item.value,
+      value: item.id,
+    }));
+  }
+  return [];
+}
+
 const Create = () => {
   const [isLoading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const onFinish = async ({ drug_store_id, password, username }: any) => {
+  const onFinish = async ({ drug_store, classification }: any) => {
     setLoading(true);
-    const request = await createPharmacy({
-      user: {
-        password,
-        username,
-      },
-      drug_store_id: drug_store_id.value,
+    const request = await createRate({
+      drug_store_id: drug_store.value,
+      classification_id: classification.value,
     });
     setLoading(false);
     if (request === 201) {
-      navigate("/admin-pharmacy/user?page=1&page_size=20");
+      navigate("/admin-pharmacy/rate?page=1&page_size=20");
     }
   };
 
@@ -125,7 +113,7 @@ const Create = () => {
 
   return (
     <div>
-      <h3 style={{ textAlign: "center" }}>Создать Аптеку</h3>
+      <h3 style={{ textAlign: "center" }}>Создать Оценку</h3>
       <Form
         name="basic"
         labelCol={{ span: 8 }}
@@ -137,37 +125,37 @@ const Create = () => {
       >
         <Form.Item
           label="Drugstore"
-          name="drug_store_id"
-          rules={[{ required: true, message: "Please input your username!" }]}
+          name="drug_store"
+          rules={[{ required: true, message: "Please choose drugstore!" }]}
         >
           <DebounceSelect
             placeholder="Выберите аптеку"
             fetchOptions={fetchDrugstores}
-            style={{ width: "64%" }}
+            // style={{ width: '100%' }}
             showSearch
             allowClear
             loading={isLoading}
           />
         </Form.Item>
-        <Form.Item<FieldType>
-          label="Username"
-          name="username"
-          rules={[{ required: true, message: "Please input your username!" }]}
+        <Form.Item
+          label="Классификация"
+          name="classification"
+          rules={[{ required: true, message: "Please choose classification!" }]}
         >
-          <Input />
-        </Form.Item>
-        <Form.Item<FieldType>
-          label="Пароль"
-          name="password"
-          rules={[{ required: true, message: "Please input your password!" }]}
-        >
-          <Input />
+          <DebounceSelect
+            placeholder="Выберите класификацию"
+            fetchOptions={fetchClassification}
+            // style={{ width: '100%' }}
+            showSearch
+            allowClear
+            loading={isLoading}
+          />
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
           <div className="back-submit-wrapper">
             <Button type="dashed" htmlType="submit">
-              <Link to="/admin-pharmacy/user?page=1&page_size=20">Назад</Link>
+              <Link to="/admin-pharmacy/rate?page=1&page_size=20">Назад</Link>
             </Button>
             <Button loading={isLoading} type="primary" htmlType="submit">
               Создать

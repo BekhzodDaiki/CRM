@@ -26,6 +26,12 @@ import EditSingleDirectorUser from "./components/admin/director/users/edit";
 import CompanySetting from "./components/admin/company/setting";
 import ClassificationCreate from "./components/admin/company/setting/create";
 import SingleClassification from './components/admin/company/setting/edit';
+import Rate from './components/admin/pharmacy/rates';
+import RateUpdate from './components/admin/pharmacy/rates/edit';
+import RateCreate from './components/admin/pharmacy/rates/create';
+import Coefficient from './components/admin/director/coefficient';
+import CoefficientCreate from './components/admin/director/coefficient/create';
+import CoefficientUpdate from './components/admin/director/coefficient/edit';
 
 function ProtectedRoute({ redirectPath = "/login", children }: any) {
   if (!localStorage.getItem("access")) {
@@ -173,6 +179,38 @@ function App() {
                 }
               />
             </Route>
+            <Route path="rate">
+              <Route
+                index
+                element={
+                  <ProtectedRoute>
+                    <Wrapper>
+                      <Rate />
+                    </Wrapper>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="create"
+                element={
+                  <ProtectedRoute>
+                    <Wrapper>
+                      <RateCreate />
+                    </Wrapper>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path=":id"
+                element={
+                  <ProtectedRoute>
+                    <Wrapper>
+                      <RateUpdate />
+                    </Wrapper>
+                  </ProtectedRoute>
+                }
+              />
+            </Route>
           </Route>
           <Route path="pharmacy-ceo">
             <Route path="user">
@@ -212,6 +250,38 @@ function App() {
                   <ProtectedRoute>
                     <Wrapper>
                       <EditSingleDirectorUser />
+                    </Wrapper>
+                  </ProtectedRoute>
+                }
+              />
+            </Route>
+            <Route path="coefficient">
+              <Route
+                index
+                element={
+                  <ProtectedRoute>
+                    <Wrapper>
+                      <Coefficient />
+                    </Wrapper>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="create"
+                element={
+                  <ProtectedRoute>
+                    <Wrapper>
+                      <CoefficientCreate />
+                    </Wrapper>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path=":id"
+                element={
+                  <ProtectedRoute>
+                    <Wrapper>
+                      <CoefficientUpdate />
                     </Wrapper>
                   </ProtectedRoute>
                 }

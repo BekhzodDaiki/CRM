@@ -93,11 +93,14 @@ interface ProjectValue {
 
 async function fetchProjects(value: string): Promise<ProjectValue[]> {
   const searchedDrug = await getDrugs({ name: value });
-  const { items } = searchedDrug;
-  return items.map((item: any) => ({
-    label: item.name,
-    value: item.id,
-  }));
+  if (searchedDrug && searchedDrug.items) {
+    const { items } = searchedDrug;
+    return items.map((item: any) => ({
+      label: item.name,
+      value: item.id,
+    }));
+  }
+  return [];
 }
 
 const Competitor = () => {
@@ -151,7 +154,9 @@ const Competitor = () => {
     const request = await getCompetitors(
       Object.fromEntries(searchParams.entries())
     );
-    setCompetitorList(request);
+    if (request !== "error") {
+      setCompetitorList(request);
+    }
   };
   useEffect(() => {
     getCompetitorList();
@@ -176,7 +181,7 @@ const Competitor = () => {
     competitor_drugs: any
   ) => {
     setLoading(true);
-     await editCompetitorDrugs(id, {
+    await editCompetitorDrugs(id, {
       company_drug_id: companyDrugId,
       competitor_drugs,
     });

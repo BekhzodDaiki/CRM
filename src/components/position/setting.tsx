@@ -1,24 +1,32 @@
 import { ColumnsType, TableProps } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import _ from 'lodash';
+import _ from "lodash";
 import SearchAdd from "../../shared/SearchAdd";
 import { CustomTable } from "../../shared/table";
 import { IBase } from "../../shared/types";
-import { bindDrugsToUser, getDrugs, getCompanyDrugs, removePositionDrug } from "./request";
+import {
+  bindDrugsToUser,
+  getDrugs,
+  getCompanyDrugs,
+  removePositionDrug,
+} from "./request";
 import { Button, Input, Popconfirm, Table, message } from "antd";
-import { CloseCircleTwoTone, MinusOutlined, PlusOutlined } from "@ant-design/icons";
-
+import {
+  CloseCircleTwoTone,
+  MinusOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 
 const Setting = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [isLoading, setLoading] = useState(false);
   const [selectedDrugs, setSelectedDrugs] = useState([]);
-  const [searchKey, setSearchKey] = useState('');
+  const [searchKey, setSearchKey] = useState("");
   const [timer, setTimer] = useState(null);
   const [initialData, setInitialData] = useState({
-    items: []
+    items: [],
   });
   const [positionList, setPosition] = useState({
     items: [],
@@ -29,8 +37,11 @@ const Setting = () => {
 
   const getListPosition = async () => {
     const request = await getCompanyDrugs();
-    setInitialData(request);
-    setPosition(request);
+    if (request !== "error") {
+      setInitialData(request);
+      setPosition(request);
+    }
+
     setLoading(false);
   };
 
@@ -39,37 +50,36 @@ const Setting = () => {
     getListPosition();
   }, [searchParams]);
 
-  const onChange: TableProps<IBase>['onChange'] = ({ current }) => {
+  const onChange: TableProps<IBase>["onChange"] = ({ current }) => {
     navigate(`class?page=${current}`);
   };
 
   const confirm = async (drugId: number) => {
     setLoading(true);
-    const request = await removePositionDrug(drugId);
-    message.success('Успешно отвязано');
+    await removePositionDrug(drugId);
+    message.success("Успешно отвязано");
     getListPosition();
     setLoading(false);
   };
 
   const cancel = (e: React.MouseEvent<HTMLElement>) => {
     console.log(e);
-    message.error('Click on No');
+    message.error("Click on No");
   };
-
 
   const columns: ColumnsType<IBase> = [
     {
-      title: 'ID',
-      dataIndex: 'id',
+      title: "ID",
+      dataIndex: "id",
     },
     {
-      title: 'Наименование',
-      dataIndex: 'name',
+      title: "Наименование",
+      dataIndex: "name",
     },
     {
-      title: 'Действие',
+      title: "Действие",
       render: ({ id }) => {
-        return searchKey === '' ? (
+        return searchKey === "" ? (
           <Popconfirm
             title="Уверены отвязать лекарство?"
             // description="Уверены привязать аптеку?"
@@ -80,13 +90,13 @@ const Setting = () => {
             cancelText="No"
           >
             <CloseCircleTwoTone
-              style={{ fontSize: '24px' }}
+              style={{ fontSize: "24px" }}
               twoToneColor="#f5222d"
             />
           </Popconfirm>
         ) : null;
-      }
-    }
+      },
+    },
   ];
 
   const rowSelection = {
@@ -94,33 +104,34 @@ const Setting = () => {
       // @ts-ignore
       setSelectedDrugs(selectedRowKeys);
     },
-
   };
 
   return (
     <div>
-      <p style={{
-        textAlign: 'center',
-        fontWeight: 'bold',
-        fontSize: 16
-      }}>
+      <p
+        style={{
+          textAlign: "center",
+          fontWeight: "bold",
+          fontSize: 16,
+        }}
+      >
         Мои позиции
       </p>
       <div
         style={{
           paddingBottom: 24,
-          display: 'flex',
-          justifyContent: 'space-between',
+          display: "flex",
+          justifyContent: "space-between",
         }}
       >
         <Input
-          style={{ width: '36vw' }}
+          style={{ width: "36vw" }}
           placeholder="Enter the drug"
           value={searchKey}
           onChange={({ target: { value } }: any) => {
             setLoading(true);
             setSearchKey(value);
-            if (value === '') {
+            if (value === "") {
               setSelectedDrugs([]);
               return getListPosition();
             }
@@ -134,12 +145,12 @@ const Setting = () => {
               // @ts-ignore
               setPosition({ items });
               setLoading(false);
-            }, 500)
+            }, 500);
             // @ts-ignore
-            setTimer(newTimer)
+            setTimer(newTimer);
           }}
         />
-        {searchKey !== '' ? (
+        {searchKey !== "" ? (
           <Button
             type={"primary"}
             // type={searchKey === '' ? 'danger' : "primary"}
@@ -150,15 +161,17 @@ const Setting = () => {
                 setLoading(true);
                 await bindDrugsToUser(selectedDrugs);
                 setLoading(false);
-                setSearchKey('');
+                setSearchKey("");
                 getListPosition();
               }
             }}
-          // onClick={() => navigate('create/')}
+            // onClick={() => navigate('create/')}
           >
             Add
           </Button>
-        ) : ''}
+        ) : (
+          ""
+        )}
       </div>
       {/* <CustomTable
         dataColumn={columns}
@@ -176,14 +189,12 @@ const Setting = () => {
         pageSize={100}
       /> */}
       <Table
-        scroll={{ y: '50vh' }}
+        scroll={{ y: "50vh" }}
         columns={columns}
-        dataSource={positionList.items.map(
-          ((drug: IBase) => ({
-            ...drug,
-            key: drug.id
-          }))
-        )}
+        dataSource={positionList.items.map((drug: IBase) => ({
+          ...drug,
+          key: drug.id,
+        }))}
         onChange={onChange}
         loading={isLoading}
         // onRow={(record: any, rowIndex: any) => {
@@ -201,7 +212,7 @@ const Setting = () => {
           current: 1,
           total: positionList.total,
           hideOnSinglePage: true,
-          showSizeChanger: false
+          showSizeChanger: false,
         }}
       />
     </div>

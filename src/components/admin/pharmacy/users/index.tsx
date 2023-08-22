@@ -15,13 +15,14 @@ const Pharmacy = () => {
   const [isLoading, setLoading] = useState(false);
   const [pharmacyList, setPharmacyList] = useState([]);
 
-  console.log("pharmacyList: ", pharmacyList);
-
   const getPharmacyList = async () => {
     const request = await getPharmacies(
       Object.fromEntries(searchParams.entries())
     );
-    setPharmacyList(request);
+    if (request !== "error") {
+      setPharmacyList(request);
+    }
+
     setLoading(false);
   };
 
@@ -31,7 +32,7 @@ const Pharmacy = () => {
   }, []);
 
   const onChangePillTable: TableProps<IBase>["onChange"] = ({ current }) => {
-    navigate(`/admin-pharmacy?page=${current}&size=20`);
+    navigate(`/admin-pharmacy/user?page=${current}&size=20`);
   };
 
   const columns: ColumnsType<IPharmacy> = [
