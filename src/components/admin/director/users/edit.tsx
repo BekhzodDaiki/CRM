@@ -146,7 +146,7 @@ const Create = () => {
     if (isModified) {
       const request = await updateSingleDirector(id, modifiedData);
       if (request === 200) {
-        navigate("/pharmacy-ceo?page=1&page_size=20");
+        navigate("/pharmacy-ceo/user?page=1&page_size=20");
       }
     }
     setLoading(false);

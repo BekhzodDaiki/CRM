@@ -73,11 +73,14 @@ const Single = () => {
         style={{
           marginTop: 16,
           display: "flex",
-          justifyContent: "center",
+          justifyContent: "space-around",
         }}
       >
         <Button type="dashed">
           <Link to="/company/user?page=1&page_size=20">Назад</Link>
+        </Button>
+        <Button type="primary">
+          <Link to="/company/user?page=1&page_size=20">Создать</Link>
         </Button>
       </div>
     </div>

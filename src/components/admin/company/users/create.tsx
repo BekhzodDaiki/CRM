@@ -34,7 +34,7 @@ const Create = () => {
     });
     setLoading(false);
     if (request === 201) {
-      navigate('/company?page=1&page_size=20');
+      navigate('/company/user?page=1&page_size=20');
     }
   };
 

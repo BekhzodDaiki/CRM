@@ -74,7 +74,8 @@ const Setting = () => {
     },
     {
       title: "Наименование",
-      dataIndex: "name",
+      dataIndex: "drug",
+      render: ({name}: {name:string}) => name
     },
     {
       title: "Действие",
@@ -105,7 +106,7 @@ const Setting = () => {
       setSelectedDrugs(selectedRowKeys);
     },
   };
-
+  console.log('positionList: ', positionList);
   return (
     <div>
       <p
@@ -142,8 +143,12 @@ const Setting = () => {
             const newTimer = setTimeout(async () => {
               const searchedDrug = await getDrugs({ name: value });
               const { items } = searchedDrug;
+              console.log('searcheddd: ', searchedDrug);
               // @ts-ignore
-              setPosition({ items });
+              setPosition({ items: items.map(({name, ...rest}) => ({
+                ...rest,
+                drug: {name}
+              })) });
               setLoading(false);
             }, 500);
             // @ts-ignore

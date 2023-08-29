@@ -74,7 +74,8 @@ const Pill = () => {
     },
     {
       title: 'Наименование',
-      dataIndex: 'name',
+      dataIndex: 'drug',
+      render: ({ name }: {name: string}) => name
     },
     {
       title: 'Активный',
