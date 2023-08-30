@@ -16,7 +16,7 @@ export const createCompany = async (body: any) => {
   try {
     const request = await httpClient.post(api.companies(),body);
     message.success('Компания успешно создано');
-    return request.status;;
+    return request.status;
   } catch (error) {
     message.error('Компания не создана')
     return showError();
@@ -48,6 +48,17 @@ export const updateSingleCompany = async (id: number, body: any) => {
     console.log('reqess: ', request.status);
     return request.status;
   } catch (error) {
+    return showError();
+  }
+};
+
+export const createOffer = async (body: any) => {
+  try {
+    const request = await httpClient.post(api.managerOffer(),body);
+    message.success('Оффер успешно создан');
+    return request.status;
+  } catch (error) {
+    message.error('Оффер не создан')
     return showError();
   }
 };

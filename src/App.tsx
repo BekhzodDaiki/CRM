@@ -25,13 +25,14 @@ import SingleDirectorUser from "./components/admin/director/users/single";
 import EditSingleDirectorUser from "./components/admin/director/users/edit";
 import CompanySetting from "./components/admin/company/setting";
 import ClassificationCreate from "./components/admin/company/setting/create";
-import SingleClassification from './components/admin/company/setting/edit';
-import Rate from './components/admin/pharmacy/rates';
-import RateUpdate from './components/admin/pharmacy/rates/edit';
-import RateCreate from './components/admin/pharmacy/rates/create';
-import Coefficient from './components/admin/director/coefficient';
-import CoefficientCreate from './components/admin/director/coefficient/create';
-import CoefficientUpdate from './components/admin/director/coefficient/edit';
+import SingleClassification from "./components/admin/company/setting/edit";
+import Rate from "./components/admin/pharmacy/rates";
+import RateUpdate from "./components/admin/pharmacy/rates/edit";
+import RateCreate from "./components/admin/pharmacy/rates/create";
+import Coefficient from "./components/admin/director/coefficient";
+import CoefficientCreate from "./components/admin/director/coefficient/create";
+import CoefficientUpdate from "./components/admin/director/coefficient/edit";
+import CompanyUserOfferCreate from "./components/admin/company/users/createSingle";
 
 function ProtectedRoute({ redirectPath = "/login", children }: any) {
   if (!localStorage.getItem("access")) {
@@ -82,16 +83,28 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-              <Route
-                path=":id/offers"
-                element={
-                  <ProtectedRoute>
-                    <Wrapper>
-                      <SingleCompanyUser />
-                    </Wrapper>
-                  </ProtectedRoute>
-                }
-              />
+              <Route path=":id/offers">
+                <Route
+                  index
+                  element={
+                    <ProtectedRoute>
+                      <Wrapper>
+                        <SingleCompanyUser />
+                      </Wrapper>
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="create/"
+                  element={
+                    <ProtectedRoute>
+                      <Wrapper>
+                        <CompanyUserOfferCreate />
+                      </Wrapper>
+                    </ProtectedRoute>
+                  }
+                />
+              </Route>
               <Route
                 path=":id/edit"
                 element={

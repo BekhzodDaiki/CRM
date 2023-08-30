@@ -58,6 +58,7 @@ const Single = () => {
 
   return (
     <div>
+      <div style={{ textAlign: 'center' }}>Как назвать эту страницу</div>
       <RowSelectionTable
         columns={columns}
         dataList={company.items}
@@ -80,7 +81,8 @@ const Single = () => {
           <Link to="/company/user?page=1&page_size=20">Назад</Link>
         </Button>
         <Button type="primary">
-          <Link to="/company/user?page=1&page_size=20">Создать</Link>
+        {/* company/user/2/offers */}
+          <Link to={`/company/user/${id}/offers/create/`}>Создать</Link>
         </Button>
       </div>
     </div>

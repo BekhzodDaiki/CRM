@@ -30,9 +30,10 @@ export default {
 
   // Admin
   companies: () => [baseUrl, "managers", "companies/"].join("/"),
+  managerOffer: () => [baseUrl, "managers", "offers/"].join('/'),
   singleCompanyOffer: (id: number) =>
     [baseUrl, "managers", "companies", id, "offers/"].join("/"),
-  singleCompany: (id: number) => [baseUrl, "companies", `${id}/`].join("/"),
+  singleCompany: (id: number) => [baseUrl, "managers", "companies", `${id}/`].join("/"),
   pharmacy: () => [baseUrl, "managers", "drug-store-users/"].join("/"),
   singlePharmacy: (id: number) =>
     [baseUrl, "managers", "drug-store-users", `${id}/`].join("/"),

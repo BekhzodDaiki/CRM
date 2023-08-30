@@ -102,9 +102,9 @@ const Create = () => {
       </h3>
       <Form
         name="basic"
-        labelCol={{ span: 8 }}
+        // labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
-        style={{ maxWidth: 600 }}
+        // style={{ maxWidth: 600 }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
@@ -130,7 +130,7 @@ const Create = () => {
               <Link to="/company/user?page=1&page_size=20">Назад</Link>
             </Button>
             <Button loading={isLoading} type="primary" htmlType="submit">
-              Создать
+              Изменить
             </Button>
           </div>
         </Form.Item>
