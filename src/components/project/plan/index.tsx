@@ -86,6 +86,7 @@ const Plan = () => {
               if (certain[0] === 0) {
                 return null;
               }
+              // @ts-ignore
               return isPacked ? certain[0] : certain[0].toLocaleString();
             }
             return null;
@@ -104,6 +105,7 @@ const Plan = () => {
               if (certain[1] === 0) {
                 return null;
               }
+              // @ts-ignore
               return isPacked ? certain[1] : certain[1].toLocaleString();
             }
             return null;
@@ -119,6 +121,7 @@ const Plan = () => {
               if (certain[2] === 0) {
                 return null;
               }
+              // @ts-ignore
               return isPacked ? certain[2] : certain[2].toLocaleString();
             }
             return null;
@@ -134,6 +137,7 @@ const Plan = () => {
               if (certain[3] === 0) {
                 return null;
               }
+              // @ts-ignore
               return isPacked ? certain[3] : certain[3].toLocaleString();
             }
             return null;
@@ -157,6 +161,7 @@ const Plan = () => {
               if (certain[0] === 0) {
                 return null;
               }
+              // @ts-ignore
               return isPacked ? certain[0] : certain[0].toLocaleString();
             }
             return null;
@@ -177,6 +182,7 @@ const Plan = () => {
               if (certain[1] === 0) {
                 return null;
               }
+              // @ts-ignore
               return isPacked ? certain[1] : certain[1].toLocaleString();
             }
             return null;
@@ -194,6 +200,7 @@ const Plan = () => {
               if (certain[2] === 0) {
                 return null;
               }
+              // @ts-ignore
               return isPacked ? certain[2] : certain[2].toLocaleString();
             }
             return null;
@@ -211,6 +218,7 @@ const Plan = () => {
               if (certain[3] === 0) {
                 return null;
               }
+              // @ts-ignore
               return isPacked ? certain[3] : certain[3].toLocaleString();
             }
             return null;
@@ -235,6 +243,7 @@ const Plan = () => {
           return date && Object.values(date)
             ? isPacked
               ? Object.values(date)[0]
+              // @ts-ignore
               : Object.values(date)[0].toLocaleString()
             : null;
         }
@@ -249,6 +258,7 @@ const Plan = () => {
           return date && Object.values(date)
             ? isPacked
               ? Object.values(date)[1]
+              // @ts-ignore
               : Object.values(date)[1].toLocaleString()
             : null;
         }
@@ -266,6 +276,7 @@ const Plan = () => {
           return date && Object.values(date)
             ? isPacked
               ? Object.values(date)[2]
+              // @ts-ignore
               : Object.values(date)[2].toLocaleString()
             : null;
         }
@@ -283,6 +294,7 @@ const Plan = () => {
           return date && Object.values(date)
             ? isPacked
               ? Object.values(date)[3]
+              // @ts-ignore
               : Object.values(date)[3].toLocaleString()
             : null;
         }
@@ -300,6 +312,7 @@ const Plan = () => {
           return date && Object.values(date)
             ? isPacked
               ? Object.values(date)[4]
+              // @ts-ignore
               : Object.values(date)[4].toLocaleString()
             : null;
         }
@@ -317,6 +330,7 @@ const Plan = () => {
           return date && Object.values(date)
             ? isPacked
               ? Object.values(date)[5]
+              // @ts-ignore
               : Object.values(date)[5].toLocaleString()
             : null;
         }
@@ -333,6 +347,7 @@ const Plan = () => {
         return date && Object.values(date)
           ? isPacked
             ? Object.values(date)[6]
+            // @ts-ignore
             : Object.values(date)[6].toLocaleString()
           : null;
         // return date && Object.values(date) ? Object.values(date)[6] : null;
@@ -347,6 +362,7 @@ const Plan = () => {
         return date && Object.values(date)
           ? isPacked
             ? Object.values(date)[7]
+            // @ts-ignore
             : Object.values(date)[7].toLocaleString()
           : null;
         // return date && Object.values(date) ? Object.values(date)[7] : null;
@@ -361,6 +377,7 @@ const Plan = () => {
         return date && Object.values(date)
           ? isPacked
             ? Object.values(date)[8]
+            // @ts-ignore
             : Object.values(date)[8].toLocaleString()
           : null;
         // return date && Object.values(date) ? Object.values(date)[8] : null;
@@ -375,6 +392,7 @@ const Plan = () => {
         return date && Object.values(date)
           ? isPacked
             ? Object.values(date)[9]
+            // @ts-ignore
             : Object.values(date)[9].toLocaleString()
           : null;
         // return date && Object.values(date) ? Object.values(date)[9] : null;
@@ -389,6 +407,7 @@ const Plan = () => {
         return date && Object.values(date)
           ? isPacked
             ? Object.values(date)[10]
+            // @ts-ignore
             : Object.values(date)[10].toLocaleString()
           : null;
         // return date && Object.values(date) ? Object.values(date)[10] : null;
@@ -403,6 +422,7 @@ const Plan = () => {
         return date && Object.values(date)
           ? isPacked
             ? Object.values(date)[11]
+            // @ts-ignore
             : Object.values(date)[11].toLocaleString()
           : null;
         // return date && Object.values(date) ? Object.values(date)[11] : null;
@@ -573,11 +593,12 @@ const Plan = () => {
             onChange={({ target: { value } }) => {
               setSelectedIds((values: any) => ({
                 ...values,
-                desired_increase: value,
+                desired_increase: Number(value) / 100,
               }));
             }}
-            value={selectedIds.desired_increase}
+            value={selectedIds.desired_increase * 100}
             type="number"
+            addonAfter="%"
           />
         </div>
       </Modal>
@@ -639,7 +660,9 @@ const Plan = () => {
                     onClick={() => {
                       showModal({
                         drugId: id,
+                        // @ts-ignore
                         price: price ? price : null,
+                        // @ts-ignore
                         desired_increase: desired_increase
                           ? desired_increase
                           : null,
